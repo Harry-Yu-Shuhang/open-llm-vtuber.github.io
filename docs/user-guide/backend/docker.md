@@ -11,11 +11,17 @@ import TabItem from '@theme/TabItem';
 目前有两种安装方式，如果您是小白，推荐您[使用Docker DeskTop](#使用docker-desktop)。如果您对Docker比较熟悉，也可以[使用终端命令](#使用终端命令)。
 :::
 
-:::note
-我们在 docker hub 成立了[openllmvtuber团队](https://hub.docker.com/orgs/openllmvtuber/members)，目前docker镜像由[@Harry_Y](https://github.com/Harry-Yu-Shuhang)维护。如果docker镜像有问题，可以联系他(邮箱: yushuhang@163.com)。
+:::caution 关于GPU支持
+目前**仅支持CPU和Nvidia GPU**, 且GPU需要配置好Nvidia驱动, 如果还没配置好, 请[**点击这里查看配置攻略**](../../quick-start.md#nvidia-gpu-支持)。
+
+如果您不打算使用GPU，而是**调用api**（这也是**绝大多数用户体验最好的方式**），或者使用CPU，可以忽略此步。
 :::
 
-## 使用Docker Desktop
+:::note 关于我们的docker团队
+我们在 docker hub 成立了[openllmvtuber团队](https://hub.docker.com/orgs/openllmvtuber/members)，目前docker镜像由[@Harry_Y](https://github.com/Harry-Yu-Shuhang)维护。
+:::
+
+## 使用 Docker Desktop 安装
 
 ### 下载 Docker Desktop
 
@@ -58,4 +64,19 @@ import TabItem from '@theme/TabItem';
 - 安装完成后，点击 Docker Desktop 图标启动 Docker。
 - 首次启动时，Docker Desktop 会要求您登录 Docker Hub 账号。如果您没有账号，需要先注册一个。
 
-## 使用终端命令
+### 获取 Docker 镜像
+
+- 点击顶部菜单的 **Search** 图标（或使用快捷键 `Ctrl + K`(Windows)或者`Cmd + K`(MacOS)）。
+![alt text](./docker_img/click_search.png)
+- 在搜索框中输入以下内容，搜索到以后点击右侧的**Pull**按钮。
+```
+openllmvtuber/open-llm-vtuber:latest
+```
+![alt text](./docker_img/openllmvtuber_image.png)
+
+### 运行 Docker 镜像
+
+点击**Images**, 找到**openllmvtuber/open-llm-vtuber**, 点击右侧的运行按钮。
+![alt text](./docker_img/run_image.png)
+
+## 使用终端命令安装
