@@ -7,8 +7,22 @@ import TabItem from '@theme/TabItem';
 
 # Docker 部署
 
-:::info 关于安装方式的说明
-目前有两种安装方式，如果您是小白，推荐您[使用Docker DeskTop](#使用docker-desktop)。如果您对Docker比较熟悉，也可以[使用终端命令](#使用终端命令)。
+:::info 开始之前
+请修改您的配置文件(conf.yaml)，将
+
+```yaml
+'system_config':
+  'host': '127.0.0.1'
+```
+
+的**host改为0.0.0.0**
+
+的host改成
+:::
+:::tip 关于安装方式
+目前支持两种方式。
+- 如果您是小白，推荐您[使用Docker DeskTop](#使用docker-desktop)。
+- 如果您对Docker比较熟悉，也可以[使用终端命令](#使用终端命令)。
 :::
 
 :::caution 关于GPU支持
@@ -25,10 +39,13 @@ import TabItem from '@theme/TabItem';
 
 ### 下载 Docker Desktop
 
-- 访问 [Docker Desktop 下载页面](https://www.docker.com/products/docker-desktop)。
-- 点击 "Download Docker Desktop"
+访问 [Docker Desktop 下载页面](https://www.docker.com/products/docker-desktop)。
+
+点击 "Download Docker Desktop"
+
 ![alt text](./docker_img/download_docker_desktop.png)
-- 根据电脑类型选择对应版本
+
+根据电脑类型选择对应版本
 
 :::tip 如何选择适用于自己电脑的版本
 - **Mac Apple Silicon** → 新款 Mac (M1/M2/M3 芯片)  
@@ -60,23 +77,37 @@ import TabItem from '@theme/TabItem';
 
 ### 启动 Docker Desktop
 
-- 双击下载好的安装包，按照提示完成安装。
-- 安装完成后，点击 Docker Desktop 图标启动 Docker。
-- 首次启动时，Docker Desktop 会要求您登录 Docker Hub 账号。如果您没有账号，需要先注册一个。
+双击下载好的安装包，按照提示完成安装。
+
+安装完成后，点击 Docker Desktop 图标启动 Docker。
+
+首次启动时，Docker Desktop 会要求您登录 Docker Hub 账号。如果您没有账号，需要先注册一个。
 
 ### 获取 Docker 镜像
 
-- 点击顶部菜单的 **Search** 图标（或使用快捷键 `Ctrl + K`(Windows)或者`Cmd + K`(MacOS)）。
+点击顶部菜单的 **Search** 图标（或使用快捷键 `Ctrl + K`(Windows)或者`Cmd + K`(MacOS)）。
+
 ![alt text](./docker_img/click_search.png)
-- 在搜索框中输入以下内容，搜索到以后点击右侧的**Pull**按钮。
+
+在搜索框中输入以下内容，搜索到以后点击右侧的**Pull**按钮。
+
 ```
 openllmvtuber/open-llm-vtuber:latest
 ```
+
 ![alt text](./docker_img/openllmvtuber_image.png)
 
 ### 运行 Docker 镜像
 
 点击**Images**, 找到**openllmvtuber/open-llm-vtuber**, 点击右侧的运行按钮。
 ![alt text](./docker_img/run_image.png)
+
+### 运行 Docker 容器
+
+点开"Optional settings", 按照下图配置，
+![alt text](./docker_img/container_config.png)
+
+然后等待,第一次拉取会比较慢。
+
 
 ## 使用终端命令安装
