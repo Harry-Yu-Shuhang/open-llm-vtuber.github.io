@@ -1,56 +1,61 @@
 ---
-sidebar_position: 8
+sidebar_position: 2
 ---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
 
 # Docker 部署
 
-:::danger
-由于重构幅度较大，Docker 镜像暂时还没有更新到 `v1.0.0` 版本，但是很快会更新。
+:::info 关于安装方式的说明
+目前有两种安装方式，如果您是小白，推荐您[使用Docker DeskTop](#使用docker-desktop)。如果您对Docker比较熟悉，也可以[使用终端命令](#使用终端命令)。
 :::
 
-:::warning
-⚠️ 请注意：此功能目前处于实验阶段，但在大多数情况下可以正常工作。
+:::note
+我们在 docker hub 成立了[openllmvtuber团队](https://hub.docker.com/orgs/openllmvtuber/members)，目前docker镜像由[@Harry_Y](https://github.com/Harry-Yu-Shuhang)维护。如果docker镜像有问题，可以联系他(邮箱: yushuhang@163.com)。
 :::
 
-您可以选择自行构建 Docker 镜像，或者直接从 Docker Hub 拉取已构建的镜像：[![](https://img.shields.io/badge/t41372%2FOpen--LLM--VTuber-%25230db7ed.svg?logo=docker&logoColor=blue&labelColor=white&color=blue)](https://hub.docker.com/r/t41372/open-llm-vtuber)
+## 使用Docker Desktop
 
-## 使用须知
+### 下载 Docker Desktop
 
-- Docker 镜像体积较大（约 13GB），且某些可选模型在使用时需要额外下载，会占用更多存储空间
-- 仅支持 NVIDIA GPU 的设备
-- 需要安装并配置 [NVIDIA Container Toolkit](https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/latest/install-guide.html) 以支持 GPU 直通
-- 目前存在的问题：容器停止后部分模型需要重新下载（该问题将在后续版本修复）
-- 不建议在 ARM 架构的设备上构建镜像，因为依赖项 gRPC 可能会出现构建失败的情况（[相关 issue](https://github.com/grpc/grpc/issues/34998)）
-- 如需在远程服务器上运行，必须配置 HTTPS。这是因为前端网页的麦克风/摄像头/屏幕录制功能只能在安全上下文（localhost 或 HTTPS 环境）中使用
+- 访问 [Docker Desktop 下载页面](https://www.docker.com/products/docker-desktop)。
+- 点击 "Download Docker Desktop"
+![alt text](./docker_img/download_docker_desktop.png)
+- 根据电脑类型选择对应版本
 
-## 预装模型说明
+:::tip 如何选择适用于自己电脑的版本
+- **Mac Apple Silicon** → 新款 Mac (M1/M2/M3 芯片)  
+- **Mac Intel Chip** → 老款 Mac (Intel 处理器)  
+- **Windows AMD64** → 大部分 Windows 电脑 (Intel/AMD 64 位)  
+- **Windows ARM64** → 少见，仅 ARM 架构 Windows (如 Surface Pro X)  
+:::
 
-默认镜像已预装大部分语音识别（ASR）和文本转语音（TTS）模型。但考虑到体积因素（约 8GB，会使总体积增加到 25GB）和性能表现，默认构建不包含以下模型：
-- Bark TTS
-- 原版 OpenAI Whisper（注意：这里指的是 Whisper，而非 WhisperCPP）
+如果您还不确定，可以按如下方法查看系统设置：
 
-如需在镜像中包含这些模型，请在构建时添加参数：
-```bash
---build-arg INSTALL_ORIGINAL_WHISPER=true --build-arg INSTALL_BARK=true
-```
+<Tabs groupId="operating-systems">
+  <TabItem value="windows" label="Windows">
 
-## 部署步骤
+1. 右键 **此电脑 → 属性**
+2. 在 **系统类型** 一栏查看：  
+   - “基于 x64 的处理器” → 选择 **Windows AMD64**  
+   - “基于 ARM 的处理器” → 选择 **Windows ARM64**
 
-1. 在构建镜像前，请先检查并调整 `conf.yaml` 配置文件（当前配置会被构建进镜像）
+  </TabItem>
+  <TabItem value="macos" label="macOS">
 
-2. 构建 Docker 镜像：
-```bash
-docker build -t open-llm-vtuber .
-```
-   > 提示：构建过程可能需要较长时间
+1. 点击屏幕左上角苹果图标 → **关于本机**  
+2. 在“芯片”一栏查看：  
+   - 显示 **Apple M1/M2/M3** → 选择 **Mac Apple Silicon**  
+   - 显示 **Intel** → 选择 **Mac Intel Chip**
 
-3. 准备 `conf.yaml` 配置文件
-   您可以从项目仓库获取，或直接通过此[链接](https://raw.githubusercontent.com/t41372/Open-LLM-VTuber/main/conf.yaml)下载
+  </TabItem>
+</Tabs>
 
-4. 运行容器：
-```bash
-docker run -it --net=host --rm -v $(pwd)/conf.yaml:/app/conf.yaml -p 12393:12393 open-llm-vtuber
-```
-   注意：请将 `$(pwd)/conf.yaml` 替换为您的配置文件实际路径
+### 启动 Docker Desktop
 
-5. 访问 `localhost:12393` 进行测试
+- 双击下载好的安装包，按照提示完成安装。
+- 安装完成后，点击 Docker Desktop 图标启动 Docker。
+- 首次启动时，Docker Desktop 会要求您登录 Docker Hub 账号。如果您没有账号，需要先注册一个。
+
+## 使用终端命令
