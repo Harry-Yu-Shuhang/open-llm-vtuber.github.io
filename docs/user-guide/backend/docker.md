@@ -8,7 +8,7 @@ import TabItem from '@theme/TabItem';
 # Docker 部署
 
 :::info 开始之前
-请修改您的配置文件(conf.yaml)，将
+请复制一份配置文件模板(点击这里下载)您的配置文件()
 
 ```yaml
 'system_config':
@@ -17,7 +17,8 @@ import TabItem from '@theme/TabItem';
 
 的**host改为0.0.0.0**
 
-的host改成
+
+
 :::
 :::tip 关于安装方式
 目前支持两种方式。
