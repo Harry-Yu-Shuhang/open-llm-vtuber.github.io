@@ -304,3 +304,69 @@ minimax_tts:
       pronunciation_dict: ''
 ```
 The `voice_id` parameter can be configured to different voice tones. You can check the [voice ID query section in the official documentation](https://platform.minimaxi.com/document/get_voice) for a complete list of supported voices. The `pronunciation_dict` supports custom pronunciation rules - for example, you can define rules to pronounce "牛肉" as "neuro" using the format shown in the example.
+
+## ElevenLabs TTS (Online, API Key Required)
+> Available since version `v1.2.1`
+
+ElevenLabs provides high-quality, natural-sounding text-to-speech with support for multiple languages and voice cloning capabilities.
+
+### Features
+- **High-Quality Audio**: Industry-leading speech synthesis quality
+- **Multi-language Support**: Supports English, Chinese, Japanese, Korean, and many other languages
+- **Voice Cloning**: Upload audio samples to clone voices
+- **Rich Voice Library**: Multiple preset voices and community voices available
+- **Real-time Generation**: Low-latency speech synthesis
+
+### Configuration Steps
+1. **Register and Get API Key**
+   - Visit [ElevenLabs](https://elevenlabs.io/) to register an account
+   - Get your API key from the ElevenLabs dashboard
+
+2. **Choose a Voice**
+   - Browse available voices in the ElevenLabs dashboard
+   - Copy the Voice ID of your preferred voice
+   - You can also upload audio samples for voice cloning
+
+3. **Configure `conf.yaml`**
+   In the `elevenlabs_tts` section of your configuration file, enter parameters as follows:
+
+```yaml
+elevenlabs_tts:
+  api_key: 'your_elevenlabs_api_key'  # Required: Your ElevenLabs API key
+  voice_id: 'JBFqnCBsd6RMkjVDRZzb'   # Required: ElevenLabs Voice ID
+  model_id: 'eleven_multilingual_v2'  # Model ID (default: eleven_multilingual_v2)
+  output_format: 'mp3_44100_128'      # Output audio format (default: mp3_44100_128)
+  stability: 0.5                      # Voice stability (0.0 to 1.0, default: 0.5)
+  similarity_boost: 0.5               # Voice similarity boost (0.0 to 1.0, default: 0.5)
+  style: 0.0                         # Voice style exaggeration (0.0 to 1.0, default: 0.0)
+  use_speaker_boost: true            # Enable speaker boost for better quality (default: true)
+```
+
+### Parameter Descriptions
+- **api_key** (required): Your ElevenLabs API key
+- **voice_id** (required): Unique identifier for the voice, found in your ElevenLabs dashboard
+- **model_id**: TTS model to use. Available options:
+  - `eleven_multilingual_v2` (default) - Supports multiple languages
+  - `eleven_monolingual_v1` - English only
+  - `eleven_turbo_v2` - Faster generation
+- **output_format**: Audio output format. Common options:
+  - `mp3_44100_128` (default) - MP3, 44.1kHz, 128kbps
+  - `mp3_44100_192` - MP3, 44.1kHz, 192kbps
+  - `pcm_16000` - PCM, 16kHz
+  - `pcm_22050` - PCM, 22.05kHz
+  - `pcm_24000` - PCM, 24kHz
+  - `pcm_44100` - PCM, 44.1kHz
+- **stability**: Controls voice consistency (0.0 = more variable, 1.0 = more consistent)
+- **similarity_boost**: Enhances similarity to the original voice (0.0 to 1.0)
+- **style**: Controls style exaggeration (0.0 = neutral, 1.0 = more expressive)
+- **use_speaker_boost**: Enables speaker boost for improved audio quality
+
+### Usage Tips
+- **Voice Selection**: Try preset voices first, then consider voice cloning for custom voices
+- **Parameter Tuning**: Adjust `stability` and `similarity_boost` for optimal results
+- **Cost Management**: ElevenLabs charges based on usage, test first before heavy usage
+- **Network Requirements**: Stable internet connection required for service availability
+
+:::tip
+ElevenLabs offers free trial credits, so you can test the quality before purchasing a paid plan.
+:::
