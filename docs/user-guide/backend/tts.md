@@ -20,6 +20,62 @@ sherpa-onnx 是一个强大的推理引擎，支持多种 TTS 模型（包括 Me
 如需使用 GPU 推理（仅支持 CUDA），请参考 [CUDA推理](/docs/user-guide/backend/asr#cuda-推理)。
 :::
 
+## Piper TTS（本地 & 轻量快速）
+Piper 是一个快速、本地化的神经网络文本转语音系统，支持多种语言和声音。使用预训练的 ONNX 模型，可在 CPU 上实现实时语音合成。
+
+### 安装步骤
+1. 安装 piper-tts：
+```sh
+uv pip install piper-tts
+```
+
+2. 下载模型文件：
+   - Piper 需要使用经过训练的 ONNX 模型文件来进行语音生成
+   - **推荐模型**：
+     - `zh_CN-huayan-medium` - 中文（普通话）
+     - `en_US-lessac-medium` - 英文
+     - `ja_JP-natsuya-medium` - 日文
+   
+   - **下载方式**：
+     - 方式一：手动下载
+       - 中文模型：[https://huggingface.co/csukuangfj/vits-piper-zh_CN-huayan-medium/tree/main](https://huggingface.co/csukuangfj/vits-piper-zh_CN-huayan-medium/tree/main)
+       - 其他模型：在 [Hugging Face](https://huggingface.co/models) 搜索 "piper" 或自行训练
+     - 方式二：使用命令自动下载（不推荐）
+       ```sh
+       python -m piper.download_voices zh_CN-huayan-medium
+       ```
+
+   
+   - **文件存放**：
+     - 下载 `.onnx` 和 `.onnx.json` 两个文件到 `models/piper/` 目录
+
+3. 在 `conf.yaml` 中配置：
+```yaml
+piper_tts:
+  model_path: "models/piper/zh_CN-huayan-medium.onnx"  # ONNX 模型文件路径
+  speaker_id: 0              # 多说话人模型的说话人 ID（单说话人模型使用 0）
+  length_scale: 1.0          # 语速控制（1.0 为正常速度，>1.0 更慢，<1.0 更快）
+  noise_scale: 0.667         # 音频变化程度（0.0-1.0）
+  noise_w: 0.8               # 说话风格变化程度（0.0-1.0）
+  volume: 1.0                # 音量（0.0-1.0）
+  normalize_audio: true      # 是否标准化音频
+  use_cuda: false            # 是否使用 GPU 加速（需要 CUDA 支持）
+```
+
+4. 在 `conf.yaml` 中设置 `tts_model: piper_tts`
+
+### 特点
+- ✅ 完全本地化，无需网络连接
+- ✅ CPU 实时推理，速度快
+- ✅ 支持多种语言和声音
+- ✅ 支持 GPU 加速（可选）
+- ✅ 模型文件小，易于部署
+
+:::tip
+如需更多模型选择，可访问 [Piper 语音样本页面](https://rhasspy.github.io/piper-samples/) 试听并下载不同语言和声音的模型。
+:::
+
+
 ## pyttsx3（轻量快速）
 简单易用的本地 TTS 引擎，使用系统默认语音合成器。使用 `py3-tts` 而不是更著名的 `pyttsx3`，因为 `pyttsx3` 似乎无人维护，且在测试电脑上无法运行。
 
