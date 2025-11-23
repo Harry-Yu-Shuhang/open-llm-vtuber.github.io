@@ -296,3 +296,69 @@ MiniMax提供的在线的TTS服务，`speech-02-turbo`等模型具有强大的TT
       pronunciation_dict: ''
 ```
 其中`voice_id`是可以配置的声音音色，具体的支持声音列表可以查看[官方文档中查询可用声音ID的部分](https://platform.minimaxi.com/document/get_voice)。`pronunciation_dict`是可以支持的自定义发声规则，比如您可以把`牛肉`发音为`neuro`，可以用类似示例的方法来定义这个发声规则。
+
+## ElevenLabs TTS (在线，需要API密钥)
+> 自版本 `v1.2.1` 起可用
+
+ElevenLabs 提供高质量、自然流畅的文本转语音服务，支持多种语言和声音克隆功能。
+
+### 功能特点
+- **高质量音频**：行业领先的语音合成质量
+- **多语言支持**：支持英语、中文、日语、韩语等多种语言
+- **声音克隆**：上传音频样本进行声音克隆
+- **丰富的语音库**：提供多种预设语音和社区语音
+- **实时生成**：低延迟语音合成
+
+### 配置步骤
+1. **注册并获取API密钥**
+   - 访问 [ElevenLabs](https://elevenlabs.io/) 注册账户
+   - 从 ElevenLabs 控制台获取您的 API 密钥
+
+2. **选择语音**
+   - 在 ElevenLabs 控制台中浏览可用语音
+   - 复制您喜欢的语音的 Voice ID
+   - 您也可以上传音频样本进行声音克隆
+
+3. **配置 `conf.yaml`**
+   在配置文件的 `elevenlabs_tts` 段落中，按以下格式填写参数：
+
+```yaml
+elevenlabs_tts:
+  api_key: 'your_elevenlabs_api_key'  # 必需：您的 ElevenLabs API 密钥
+  voice_id: 'JBFqnCBsd6RMkjVDRZzb'   # 必需：ElevenLabs 语音 ID
+  model_id: 'eleven_multilingual_v2'  # 模型 ID（默认：eleven_multilingual_v2）
+  output_format: 'mp3_44100_128'      # 输出音频格式（默认：mp3_44100_128）
+  stability: 0.5                      # 语音稳定性（0.0 到 1.0，默认：0.5）
+  similarity_boost: 0.5               # 语音相似度增强（0.0 到 1.0，默认：0.5）
+  style: 0.0                         # 语音风格夸张度（0.0 到 1.0，默认：0.0）
+  use_speaker_boost: true            # 启用说话人增强以获得更好质量（默认：true）
+```
+
+### 参数说明
+- **api_key**（必需）：您的 ElevenLabs API 密钥
+- **voice_id**（必需）：语音的唯一标识符，在 ElevenLabs 控制台中找到
+- **model_id**：要使用的 TTS 模型。可用选项：
+  - `eleven_multilingual_v2`（默认）- 支持多种语言
+  - `eleven_monolingual_v1` - 仅英语
+  - `eleven_turbo_v2` - 更快的生成速度
+- **output_format**：音频输出格式。常用选项：
+  - `mp3_44100_128`（默认）- MP3，44.1kHz，128kbps
+  - `mp3_44100_192` - MP3，44.1kHz，192kbps
+  - `pcm_16000` - PCM，16kHz
+  - `pcm_22050` - PCM，22.05kHz
+  - `pcm_24000` - PCM，24kHz
+  - `pcm_44100` - PCM，44.1kHz
+- **stability**：控制语音一致性（0.0 = 更多变化，1.0 = 更一致）
+- **similarity_boost**：增强与原始语音的相似度（0.0 到 1.0）
+- **style**：控制风格夸张度（0.0 = 中性，1.0 = 更具表现力）
+- **use_speaker_boost**：启用说话人增强以提高音频质量
+
+### 使用技巧
+- **语音选择**：先尝试预设语音，然后考虑使用声音克隆获得自定义语音
+- **参数调优**：调整 `stability` 和 `similarity_boost` 以获得最佳效果
+- **成本管理**：ElevenLabs 按使用量收费，大量使用前请先测试
+- **网络要求**：需要稳定的网络连接以确保服务可用
+
+:::tip
+ElevenLabs 提供免费试用额度，您可以在购买付费计划前先测试质量。
+:::
