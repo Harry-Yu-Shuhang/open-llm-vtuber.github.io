@@ -8,7 +8,15 @@ import TabItem from '@theme/TabItem';
 # Docker 部署
 
 :::info 开始之前
-请复制一份配置文件模板(点击这里下载)您的配置文件()
+请复制一份配置文件模板
+
+[点击这里前往中文配置文件网页](https://github.com/Open-LLM-VTuber/Open-LLM-VTuber/blob/main/config_templates/conf.ZH.default.yaml)
+
+在网页右上角，有一个"Download raw file"按钮，如下图，点击进行下载
+
+![alt text](./docker_img/download_conf_yaml.png)
+
+下载完成后，将您的配置文件改名为conf.yaml,并将以下部分
 
 ```yaml
 'system_config':
@@ -16,8 +24,12 @@ import TabItem from '@theme/TabItem';
 ```
 
 的**host改为0.0.0.0**
+```yaml
+'system_config':
+  'host': '0.0.0.0'
+```
 
-
+然后，如果自己有想修改的配置，就修改conf.yaml,更换asr，llm，tts等。将改好的conf.yaml放到一个特定的路径，后面运行 Docker 容器这一步的Volumes需要填写conf.yaml所在的文件夹。
 
 :::
 :::tip 关于安装方式
