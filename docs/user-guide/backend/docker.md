@@ -143,6 +143,10 @@ openllmvtuber/open-llm-vtuber:latest
 点击左上角的 `12393:12393`，如下图，或者在浏览器输入 `http://localhost:12393`
 ![](docker_img/click_12393.png)
 
-恭喜你，成功了，和你的虚拟伴侣对话吧！
+**恭喜你，成功了**，和你的虚拟伴侣对话吧！
+
+## 更新
+### 更新 Docker 镜像
+
 
 ## 使用终端命令
