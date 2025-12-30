@@ -69,10 +69,9 @@ Groq Whisper API、OpenAI API 等国外大模型/推理平台 API 一般无法�
 Docker是**最适合小白**的部署方式，它可以一键部署所有组件，无需手动配置。
 :::
 
-:::warning 中国大陆网络提示
-中国大陆地区拉取镜像时可能会遇到网络问题（包括 Docker Hub 访问缓慢或 DNS 解析异常）。  
-如果遇到拉取失败/速度极慢，建议魔法上网（首选），或者参考[这个镜像汇总仓库](https://github.com/dongyubin/DockerHub?tab=readme-ov-file)寻找可用镜像源与配置方法。
-:::
+如果你对 Docker 感兴趣，请移步[Docker 部署指南](/docs/user-guide/backend/docker.md)。
+
+如果不感兴趣，您也可以跳转到常规配置方法，从下一步，也就是[环境准备](#环境准备)步骤开始。
 
 :::note 目前的docker镜像对平台支持情况如下表
 | 平台     | CPU 支持 | NVIDIA GPU 支持 | AMD/Intel GPU 支持 |
@@ -81,10 +80,6 @@ Docker是**最适合小白**的部署方式，它可以一键部署所有组件�
 | Windows  | ✅       | ✅[(需安装Nvidia驱动）](#nvidia-gpu-支持) | ❌ |
 | macOS    | ✅       | ❌              | ❌                 |
 :::
-
-如果你对 Docker 感兴趣，请移步[Docker 部署指南](/docs/user-guide/backend/docker.md)。
-
-如果不感兴趣，您也可以跳转到常规配置方法，从下一步，也就是[环境准备](#环境准备)步骤开始。
 
 ## 环境准备
 

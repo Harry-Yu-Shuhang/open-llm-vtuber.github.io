@@ -7,34 +7,45 @@ import TabItem from '@theme/TabItem';
 
 # Docker 部署
 
-:::info 开始之前
-请复制一份配置文件模板
+## 开始之前
+请下载docker版用户配置文件
+([点击这里前往配置文件代码仓库](https://github.com/Open-LLM-VTuber/OLV-Docker-Config))
 
-[点击这里前往中文配置文件网页](https://github.com/Open-LLM-VTuber/Open-LLM-VTuber/blob/main/config_templates/conf.ZH.default.yaml)
+### git下载（推荐）
+先[按照Quick Start安装 git](../../quick-start.md/#安装-git)
 
-在网页右上角，有一个"Download raw file"按钮，如下图，点击进行下载
+然后
+```bash
+# 进入项目目录
+cd D:\
 
-![alt text](./docker_img/download_conf_yaml.png)
-
-下载完成后，将您的配置文件改名为conf.yaml,并将以下部分
-
-```yaml
-'system_config':
-  'host': '127.0.0.1'
+# 克隆仓库
+git clone https://github.com/Open-LLM-VTuber/OLV-Docker-Config
 ```
 
-的**host改为0.0.0.0**
-```yaml
-'system_config':
-  'host': '0.0.0.0'
-```
-
-然后，如果自己有想修改的配置，就修改conf.yaml,更换asr，llm，tts等。将改好的conf.yaml放到一个特定的路径，后面运行 Docker 容器这一步的Volumes需要填写conf.yaml所在的文件夹。
-
+### zip下载（适合萌新）
+:::warning 这样下载的话没法更新，但是当下是可以用的。
 :::
+在网页右上角，点击 `Code` -> `Download ZIP` 下载 docker 用户配置, 如下图。
+
+![](docker_img/download_docker_conf_repo.png)
+
+
+## 修改配置
+如果自己有想修改的配置，就修改`conf.yaml`。
+
+:::info 默认的 `conf.yaml` 是英文的，如果想替换成中文，请去 `config_templates` 文件夹下复制 [`conf.ZH.default.yaml`](https://github.com/Open-LLM-VTuber/OLV-Docker-Config/blob/main/config_templates/conf.ZH.default.yaml), 然后回到上一级, 替换掉原来的 `conf.yaml`
+:::
+
+如果你是小白，建议直接用默认的配置文件，可以一键启动。
+
+如果你想改一些配置，比如人设、模型、asr、tts等，可以参考[Quick Start里的修改配置部分](../../quick-start.md/#修改配置文件)。
+
+## 安装Docker
+
 :::tip 关于安装方式
 目前支持两种方式。
-- 如果您是小白，推荐您[使用Docker DeskTop](#使用docker-desktop)。
+- 如果您是小白，推荐您[使用Docker DeskTop](#使用-docker-desktop)。
 - 如果您对Docker比较熟悉，也可以[使用终端命令](#使用终端命令)。
 :::
 
@@ -44,11 +55,14 @@ import TabItem from '@theme/TabItem';
 如果您不打算使用GPU，而是**调用api**（这也是**绝大多数用户体验最好的方式**），或者使用CPU，可以忽略此步。
 :::
 
-:::note 关于我们的docker团队
-我们在 docker hub 成立了[openllmvtuber团队](https://hub.docker.com/orgs/openllmvtuber/members)，目前docker镜像由[@Harry_Y](https://github.com/Harry-Yu-Shuhang)维护。
+:::note 关于我们`Docker`团队
+我们在 docker hub 成立了[openllmvtuber团队](https://hub.docker.com/orgs/openllmvtuber/members)，目前Docker镜像由[@Harry_Y](https://github.com/Harry-Yu-Shuhang)维护。
 :::
 
-## 使用 Docker Desktop 安装
+## 使用 Docker Desktop
+
+:::warning 由于 `Docker Desktop` 退出重启经常卡死，建议尽量避免重启，如果重启很久以后没有反应，可以在任务管理器 (`Windows`) 或者 活动监视器 (`macOS`) 里杀掉 `Docker Desktop` 的后台进程，然后再次启动。
+:::
 
 ### 下载 Docker Desktop
 
@@ -56,7 +70,7 @@ import TabItem from '@theme/TabItem';
 
 点击 "Download Docker Desktop"
 
-![alt text](./docker_img/download_docker_desktop.png)
+![alt text](docker_img/download_docker_desktop.png)
 
 根据电脑类型选择对应版本
 
@@ -100,7 +114,7 @@ import TabItem from '@theme/TabItem';
 
 点击顶部菜单的 **Search** 图标（或使用快捷键 `Ctrl + K`(Windows)或者`Cmd + K`(MacOS)）。
 
-![alt text](./docker_img/click_search.png)
+![alt text](docker_img/click_search.png)
 
 在搜索框中输入以下内容，搜索到以后点击右侧的**Pull**按钮。
 
@@ -108,19 +122,27 @@ import TabItem from '@theme/TabItem';
 openllmvtuber/open-llm-vtuber:latest
 ```
 
-![alt text](./docker_img/openllmvtuber_image.png)
+![alt text](docker_img/openllmvtuber_image.png)
 
 ### 运行 Docker 镜像
 
 点击**Images**, 找到**openllmvtuber/open-llm-vtuber**, 点击右侧的运行按钮。
-![alt text](./docker_img/run_image.png)
+![alt text](docker_img/run_image.png)
 
 ### 运行 Docker 容器
 
 点开"Optional settings", 按照下图配置，
-![alt text](./docker_img/container_config.png)
+![alt text](docker_img/container_config_cn.png)
 
-然后等待,第一次拉取会比较慢。
+等待,第一次拉取会比较慢。
 
+### 在浏览器打开web界面
+等到出现这几行字，如下图，就说明启动成功了。
+![](docker_img/docker_run_success.png)
 
-## 使用终端命令安装
+点击左上角的 `12393:12393`，如下图，或者在浏览器输入 `http://localhost:12393`
+![](docker_img/click_12393.png)
+
+恭喜你，成功了，和你的虚拟伴侣对话吧！
+
+## 使用终端命令
