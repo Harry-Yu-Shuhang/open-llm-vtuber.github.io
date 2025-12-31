@@ -7,12 +7,14 @@ import TabItem from '@theme/TabItem';
 
 # Docker 部署
 
-## 开始之前
-请下载docker版用户配置文件
+## 下载配置文件
+请下载docker版用户配置文件。
 ([点击这里前往配置文件代码仓库](https://github.com/Open-LLM-VTuber/OLV-Docker-Config))
 
+下载方式分为 [git下载](#git下载推荐) 和 [zip下载](#zip下载适合萌新) 两种方式。
+
 ### git下载（推荐）
-先[按照Quick Start安装 git](../../quick-start.md/#安装-git)
+先[按照Quick Start安装 git](../../quick-start.md#安装-git)
 
 然后
 ```bash
@@ -31,7 +33,7 @@ git clone https://github.com/Open-LLM-VTuber/OLV-Docker-Config
 ![](docker_img/download_docker_conf_repo.png)
 
 
-## 修改配置
+## 修改配置文件
 如果自己有想修改的配置，就修改`conf.yaml`。
 
 :::info 默认的 `conf.yaml` 是英文的，如果想替换成中文，请去 `config_templates` 文件夹下复制 [`conf.ZH.default.yaml`](https://github.com/Open-LLM-VTuber/OLV-Docker-Config/blob/main/config_templates/conf.ZH.default.yaml), 然后回到上一级, 替换掉原来的 `conf.yaml`
@@ -39,14 +41,14 @@ git clone https://github.com/Open-LLM-VTuber/OLV-Docker-Config
 
 如果你是小白，建议直接用默认的配置文件，可以一键启动。
 
-如果你想改一些配置，比如人设、模型、asr、tts等，可以参考[Quick Start里的修改配置部分](../../quick-start.md/#修改配置文件)。
+如果你想改一些配置，比如人设、模型、asr、tts等，可以参考[ Quick Start 里的修改配置部分](../../quick-start.md#修改配置文件)。
 
-## 安装Docker
+## 选择 Docker 安装方式
 
 :::tip 关于安装方式
 目前支持两种方式。
-- 如果您是小白，推荐您[使用Docker DeskTop](#使用-docker-desktop)。
-- 如果您对Docker比较熟悉，也可以[使用终端命令](#使用终端命令)。
+- 如果您是小白，推荐您[使用 Docker DeskTop](#方式一-使用-docker-desktop) 。
+- 如果您对 Docker 比较熟悉，也可以[使用终端命令](#方式二-使用终端命令)。
 :::
 
 :::caution 关于GPU支持
@@ -59,7 +61,7 @@ git clone https://github.com/Open-LLM-VTuber/OLV-Docker-Config
 我们在 docker hub 成立了[openllmvtuber团队](https://hub.docker.com/orgs/openllmvtuber/members)，目前Docker镜像由[@Harry_Y](https://github.com/Harry-Yu-Shuhang)维护。
 :::
 
-## 使用 Docker Desktop
+## 方式一 使用 Docker Desktop
 
 :::warning 由于 `Docker Desktop` 退出重启经常卡死，建议尽量避免重启，如果重启很久以后没有反应，可以在任务管理器 (`Windows`) 或者 活动监视器 (`macOS`) 里杀掉 `Docker Desktop` 的后台进程，然后再次启动。
 :::
@@ -145,8 +147,30 @@ openllmvtuber/open-llm-vtuber:latest
 
 **恭喜你，成功了**，和你的虚拟伴侣对话吧！
 
-## 更新
-### 更新 Docker 镜像
+## 方式二 使用终端命令
+第一步，输入以下终端命令，安装 Docker Desktop。
+<Tabs groupId="operating-systems">
+  <TabItem value="windows" label="Windows">
+
+```bash
+winget install -e --id Docker.DockerDesktop
+```
+
+  </TabItem>
+  <TabItem value="macos" label="macOS">
+
+```bash
+brew install --cask docker
+```
+
+  </TabItem>
+</Tabs>
+
+第二步，输入以下终端命令，拉取最新镜像。
+
+```bash
+docker pull openllmvtuber/open-llm-vtuber:latest
+```
 
 
-## 使用终端命令
+
