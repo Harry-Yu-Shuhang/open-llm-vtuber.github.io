@@ -131,6 +131,14 @@ openllmvtuber/open-llm-vtuber:latest
 点击**Images**, 找到**openllmvtuber/open-llm-vtuber**, 点击右侧的运行按钮。
 ![alt text](docker_img/run_image.png)
 
+### 配置 LLM
+这一步可以参考 [Quick Start 里的配置 LLM 部分](../../quick-start.md#3-配置-llm)。
+:::info 关于调用LLM的方式
+如果您使用本地模型，比如默认配置的 Ollama， 这一步必须做。
+
+如果你选择api调用，不需要配置LLM。
+:::
+
 ### 运行 Docker 容器
 
 点开"Optional settings", 按照下图配置，
