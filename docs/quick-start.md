@@ -394,9 +394,6 @@ source ~/.zshrc   # 如果使用 zsh
 </Tabs>
 
 
-
-
-
 ### 2. 安装项目依赖
 
 :::info

@@ -7,9 +7,9 @@ import TabItem from '@theme/TabItem';
 
 # Docker 部署
 
-## 下载配置文件
-请下载docker版用户配置文件。
-([点击这里前往配置文件代码仓库](https://github.com/Open-LLM-VTuber/OLV-Docker-Config))
+## 下载配置代码
+请下载docker版用户配置代码仓库。
+([点击这里前往用户配置代码仓库](https://github.com/Open-LLM-VTuber/OLV-Docker-Config))
 
 下载方式分为 [git下载](#git下载推荐) 和 [zip下载](#zip下载适合萌新) 两种方式。
 
@@ -34,14 +34,16 @@ git clone https://github.com/Open-LLM-VTuber/OLV-Docker-Config
 
 
 ## 修改配置文件
-如果自己有想修改的配置，就修改`conf.yaml`。
+如果自己有想修改的配置，就修改配置文件`conf.yaml`。
 
-:::info 默认的 `conf.yaml` 是英文的，如果想替换成中文，请去 `config_templates` 文件夹下复制 [`conf.ZH.default.yaml`](https://github.com/Open-LLM-VTuber/OLV-Docker-Config/blob/main/config_templates/conf.ZH.default.yaml), 然后回到上一级, 替换掉原来的 `conf.yaml`
+:::info 默认的 `conf.yaml` 是英文的，如果想替换成中文，请到 `config_templates` 文件夹下复制 `conf.ZH.default.yaml`, 然后回到上一级, 替换掉原来的 `conf.yaml`
 :::
 
 如果你是小白，建议直接用默认的配置文件，可以一键启动。
 
-如果你想改一些配置，比如人设、模型、asr、tts等，可以参考[ Quick Start 里的修改配置部分](../../quick-start.md#修改配置文件)。
+如果你想改一些配置，比如人设、模型、asr、tts等，请修改`conf.yaml`的对应字段。
+
+关于配置文件里各个字段的作用，可以参考配置文件里的注释。
 
 ## 选择 Docker 安装方式
 
@@ -52,7 +54,7 @@ git clone https://github.com/Open-LLM-VTuber/OLV-Docker-Config
 :::
 
 :::caution 关于GPU支持
-目前**仅支持CPU和Nvidia GPU**, 且GPU需要配置好Nvidia驱动, 如果还没配置好, 请[**点击这里查看配置攻略**](../../quick-start.md#nvidia-gpu-支持)。
+目前**仅支持CPU和Nvidia GPU**, 且GPU需要配置好Nvidia驱动, 如果还没配置好, 请[**点击这里前往Quick Start查看配置攻略**](../../quick-start.md#nvidia-gpu-支持)。
 
 如果您不打算使用GPU，而是**调用api**（这也是**绝大多数用户体验最好的方式**），或者使用CPU，可以忽略此步。
 :::
@@ -138,6 +140,11 @@ openllmvtuber/open-llm-vtuber:latest
 
 如果你选择api调用，不需要配置LLM。
 :::
+如果您已经装过 Ollama, 可以直接终端运行以下指令。如果没有的话，需要先安装 Ollama，然后再运行以下指令。
+
+```bash
+ollama run qwen2.5:latest
+```
 
 ### 运行 Docker 容器
 
