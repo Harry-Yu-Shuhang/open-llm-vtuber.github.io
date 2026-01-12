@@ -7,20 +7,18 @@ import TabItem from '@theme/TabItem';
 
 # Docker 部署
 
-## 下载配置代码
+## 下载配置文件
 
-### git下载（推荐）
+### git下载（适合有git基础的用户）
 先[按照Quick Start安装 git](../../quick-start.md#安装-git)
-, 然后在终端运行
-```bash
-cd Your\Project\Path
-```
+, 然后下载docker用户配置文件:
+
 ```bash
 git clone https://github.com/Open-LLM-VTuber/OLV-Docker-Config
 ```
 
-### zip下载（适合萌新）
-:::warning 这样下载的话没法更新，但是当下是可以用的。
+### zip下载（适合没有代码基础的用户）
+:::warning 这样下载的话没法更新，但是当下肯定是可以用的。
 :::
 首先，[点击这里前往用户配置代码仓库](https://github.com/Open-LLM-VTuber/OLV-Docker-Config)
 
@@ -124,25 +122,39 @@ openllmvtuber/open-llm-vtuber:latest
 
 ![alt text](docker_img/openllmvtuber_image.png)
 
-### 运行 Docker 镜像
-
-点击**Images**, 找到**openllmvtuber/open-llm-vtuber**, 点击右侧的运行按钮。
-![alt text](docker_img/run_image.png)
-
 ### 配置 LLM
 这一步可以参考 [Quick Start 里的配置 LLM 部分](../../quick-start.md#3-配置-llm)。
-:::info 关于调用LLM的方式
-如果您使用本地模型，比如默认配置的 `Ollama`， 这一步必须做。
-
-如果你选择api调用，不需要配置LLM。
+:::info 如果您是没有代码基础的小白
+建议按照以下步骤，直接使用默认的 `Ollama` 模型调用方式，省去配置麻烦。
 :::
-如果您已经装过 `Ollama`, 可以终端运行以下指令，启动 `Ollama`，顺便查看已安装的模型。
 
+1. 从 [Ollama 官网](https://ollama.com/) 下载并安装 Ollama 客户端。
+
+2. 终端输入以下指令，验证Ollama是否安装成功:
+```bash
+ollama --version
+```
+
+3. 下载并运行模型（以默认配置文件的 `qwen2.5:latest` 为例）：
+```bash
+ollama run qwen2.5:latest
+```
+
+4. 查看已安装的模型。
 ```bash
 ollama list
 ```
 
+:::info 关于调用LLM的方式
+如果您使用本地模型，比如默认配置的 `Ollama`， 这一步必须做。
+
+如果你选择api调用，可以跳过这一步。
+:::
+
 ### 运行 Docker 容器
+
+点击**Images**, 找到**openllmvtuber/open-llm-vtuber**, 点击右侧的运行按钮。
+![alt text](docker_img/run_image.png)
 
 点开"Optional settings", 按照下图配置，
 ![alt text](docker_img/container_config_cn.png)
@@ -157,7 +169,7 @@ ollama list
 **恭喜你，成功了**，和你的虚拟伴侣对话吧！
 
 ## 使用终端命令安装 Docker
-第一步，输入以下终端命令，安装 Docker Desktop。
+第一步，安装 Docker Desktop。
 <Tabs groupId="operating-systems">
   <TabItem value="windows" label="Windows">
 
@@ -175,11 +187,20 @@ brew install --cask docker
   </TabItem>
 </Tabs>
 
-第二步，输入以下终端命令，拉取最新镜像。
+第二步，拉取最新镜像。
 
 ```bash
 docker pull openllmvtuber/open-llm-vtuber:latest
 ```
 
+第三步，运行容器。
+```bash
+cd OLV-Docker-Config\Path
+```
 
+可以更改 `docker-compose.yml`，默认的也可以直接一键启动。
+
+```bash 
+docker-compose up -d
+```
 
