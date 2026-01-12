@@ -8,27 +8,23 @@ import TabItem from '@theme/TabItem';
 # Docker 部署
 
 ## 下载配置代码
-请下载docker版用户配置代码仓库。
-([点击这里前往用户配置代码仓库](https://github.com/Open-LLM-VTuber/OLV-Docker-Config))
-
-下载方式分为 [git下载](#git下载推荐) 和 [zip下载](#zip下载适合萌新) 两种方式。
 
 ### git下载（推荐）
 先[按照Quick Start安装 git](../../quick-start.md#安装-git)
-
-然后
+, 然后在终端运行
 ```bash
-# 进入项目目录
-cd D:\
-
-# 克隆仓库
+cd Your\Project\Path
+```
+```bash
 git clone https://github.com/Open-LLM-VTuber/OLV-Docker-Config
 ```
 
 ### zip下载（适合萌新）
 :::warning 这样下载的话没法更新，但是当下是可以用的。
 :::
-在网页右上角，点击 `Code` -> `Download ZIP` 下载 docker 用户配置, 如下图。
+首先，[点击这里前往用户配置代码仓库](https://github.com/Open-LLM-VTuber/OLV-Docker-Config)
+
+然后，在网页右上角，点击 `Code` -> `Download ZIP` 下载 docker 用户配置, 如下图。
 
 ![](docker_img/download_docker_conf_repo.png)
 
@@ -45,12 +41,12 @@ git clone https://github.com/Open-LLM-VTuber/OLV-Docker-Config
 
 关于配置文件里各个字段的作用，可以参考配置文件里的注释。
 
-## 选择 Docker 安装方式
+## 安装 Docker
 
 :::tip 关于安装方式
 目前支持两种方式。
-- 如果您是小白，推荐您[使用 Docker DeskTop](#方式一-使用-docker-desktop) 。
-- 如果您对 Docker 比较熟悉，也可以[使用终端命令](#方式二-使用终端命令)。
+- 如果您是小白，推荐您[使用 Docker DeskTop](#使用-docker-desktop-安装-docker) 。
+- 如果您对 Docker 比较熟悉，也可以[使用终端命令](#使用终端命令安装-docker))。
 :::
 
 :::caution 关于GPU支持
@@ -63,7 +59,7 @@ git clone https://github.com/Open-LLM-VTuber/OLV-Docker-Config
 我们在 docker hub 成立了[openllmvtuber团队](https://hub.docker.com/orgs/openllmvtuber/members)，目前Docker镜像由[@Harry_Y](https://github.com/Harry-Yu-Shuhang)维护。
 :::
 
-## 方式一 使用 Docker Desktop
+## 使用 Docker Desktop 安装 Docker
 
 :::warning 由于 `Docker Desktop` 退出重启经常卡死，建议尽量避免重启，如果重启很久以后没有反应，可以在任务管理器 (`Windows`) 或者 活动监视器 (`macOS`) 里杀掉 `Docker Desktop` 的后台进程，然后再次启动。
 :::
@@ -136,14 +132,14 @@ openllmvtuber/open-llm-vtuber:latest
 ### 配置 LLM
 这一步可以参考 [Quick Start 里的配置 LLM 部分](../../quick-start.md#3-配置-llm)。
 :::info 关于调用LLM的方式
-如果您使用本地模型，比如默认配置的 Ollama， 这一步必须做。
+如果您使用本地模型，比如默认配置的 `Ollama`， 这一步必须做。
 
 如果你选择api调用，不需要配置LLM。
 :::
-如果您已经装过 Ollama, 可以直接终端运行以下指令。如果没有的话，需要先安装 Ollama，然后再运行以下指令。
+如果您已经装过 `Ollama`, 可以终端运行以下指令，启动 `Ollama`，顺便查看已安装的模型。
 
 ```bash
-ollama run qwen2.5:latest
+ollama list
 ```
 
 ### 运行 Docker 容器
@@ -151,10 +147,8 @@ ollama run qwen2.5:latest
 点开"Optional settings", 按照下图配置，
 ![alt text](docker_img/container_config_cn.png)
 
-等待,第一次拉取会比较慢。
-
 ### 在浏览器打开web界面
-等到出现这几行字，如下图，就说明启动成功了。
+等到出现这几行字，如下图，就说明启动成功了。第一次拉取会比较慢，因为要安装一些必要工具，请耐心等待。
 ![](docker_img/docker_run_success.png)
 
 点击左上角的 `12393:12393`，如下图，或者在浏览器输入 `http://localhost:12393`
@@ -162,7 +156,7 @@ ollama run qwen2.5:latest
 
 **恭喜你，成功了**，和你的虚拟伴侣对话吧！
 
-## 方式二 使用终端命令
+## 使用终端命令安装 Docker
 第一步，输入以下终端命令，安装 Docker Desktop。
 <Tabs groupId="operating-systems">
   <TabItem value="windows" label="Windows">
