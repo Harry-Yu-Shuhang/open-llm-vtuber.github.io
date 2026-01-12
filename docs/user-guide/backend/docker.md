@@ -124,26 +124,29 @@ openllmvtuber/open-llm-vtuber:latest
 
 ### 配置 LLM
 这一步可以参考 [Quick Start 里的配置 LLM 部分](../../quick-start.md#3-配置-llm)。
+
 :::info 如果您是没有代码基础的小白
 建议按照以下步骤，直接使用默认的 `Ollama` 模型调用方式，省去配置麻烦。
+
+<details>
+  1. 从 [Ollama 官网](https://ollama.com/) 下载并安装 Ollama 客户端。
+
+  2. 终端输入以下指令，验证Ollama是否安装成功:
+  ```bash
+  ollama --version
+  ```
+
+  3. 下载并运行模型（以默认配置文件的 `qwen2.5:latest` 为例）：
+  ```bash
+  ollama run qwen2.5:latest
+  ```
+
+  4. 查看已安装的模型。
+  ```bash
+  ollama list
+  ```
+</details>
 :::
-
-1. 从 [Ollama 官网](https://ollama.com/) 下载并安装 Ollama 客户端。
-
-2. 终端输入以下指令，验证Ollama是否安装成功:
-```bash
-ollama --version
-```
-
-3. 下载并运行模型（以默认配置文件的 `qwen2.5:latest` 为例）：
-```bash
-ollama run qwen2.5:latest
-```
-
-4. 查看已安装的模型。
-```bash
-ollama list
-```
 
 :::info 关于调用LLM的方式
 如果您使用本地模型，比如默认配置的 `Ollama`， 这一步必须做。
@@ -193,14 +196,21 @@ brew install --cask docker
 docker pull openllmvtuber/open-llm-vtuber:latest
 ```
 
-第三步，运行容器。
+第三步，打包容器。可以更改 `docker-compose.yml`，默认的也可以直接一键启动。
 ```bash
 cd OLV-Docker-Config\Path
 ```
 
-可以更改 `docker-compose.yml`，默认的也可以直接一键启动。
-
 ```bash 
 docker-compose up -d
 ```
+
+第四步，查看容器的日志。
+```bash 
+docker logs -f open-llm-vtuber-latest
+```
+
+第五步，在浏览器打开web界面。
+等到出现 "Uvicorn running on http://0.0.0.0:12393" 以后，在浏览器输入 `http://localhost:12393` 打开web界面。
+至此，你就成功部署了 Open LLM VTuber！
 
