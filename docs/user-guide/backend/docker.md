@@ -172,7 +172,7 @@ openllmvtuber/open-llm-vtuber:latest
 **恭喜你，成功了**，和你的虚拟伴侣对话吧！
 
 ## 使用终端命令安装 Docker
-第一步，安装 Docker Desktop。
+1. 安装 Docker Desktop。
 <Tabs groupId="operating-systems">
   <TabItem value="windows" label="Windows">
 
@@ -190,13 +190,13 @@ brew install --cask docker
   </TabItem>
 </Tabs>
 
-第二步，拉取最新镜像。
+2. 拉取最新镜像。
 
 ```bash
 docker pull openllmvtuber/open-llm-vtuber:latest
 ```
 
-第三步，打包容器。可以更改 `docker-compose.yml`，默认的也可以直接一键启动。
+3. 打包容器。可以更改 `docker-compose.yml`，默认的也可以直接一键启动。
 ```bash
 cd OLV-Docker-Config\Path
 ```
@@ -205,12 +205,14 @@ cd OLV-Docker-Config\Path
 docker-compose up -d
 ```
 
-第四步，查看容器的日志。
+4. 查看容器的日志。
 ```bash 
 docker logs -f open-llm-vtuber-latest
 ```
 
-第五步，在浏览器打开web界面。
-等到出现 "Uvicorn running on http://0.0.0.0:12393" 以后，在浏览器输入 `http://localhost:12393` 打开web界面。
+5. 在浏览器打开web界面。
+
+等到日志里出现 `Uvicorn running on http://0.0.0.0:12393` 以后，在浏览器输入 `http://localhost:12393` 打开web界面。
+
 至此，你就成功部署了 Open LLM VTuber！
 
