@@ -123,7 +123,11 @@ openllmvtuber/open-llm-vtuber:latest
 ![alt text](docker_img/openllmvtuber_image.png)
 
 ### 配置 LLM
-这一步可以参考 [Quick Start 里的配置 LLM 部分](../../quick-start.md#3-配置-llm)。
+:::info 关于调用LLM的方式
+如果您使用本地模型，比如默认配置的 `Ollama`， 这一步必须做。
+
+如果你选择api调用，可以跳过这一步。
+:::
 
 :::info 如果您是没有代码基础的小白
 建议按照以下步骤，直接使用默认的 `Ollama` 模型调用方式，省去配置麻烦。
@@ -148,11 +152,8 @@ openllmvtuber/open-llm-vtuber:latest
 </details>
 :::
 
-:::info 关于调用LLM的方式
-如果您使用本地模型，比如默认配置的 `Ollama`， 这一步必须做。
+更多注意事项，可以参考 [Quick Start 里的配置 LLM 部分](../../quick-start.md#3-配置-llm)。
 
-如果你选择api调用，可以跳过这一步。
-:::
 
 ### 运行 Docker 容器
 
