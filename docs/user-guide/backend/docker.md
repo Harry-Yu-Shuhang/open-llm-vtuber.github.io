@@ -24,8 +24,7 @@ git clone https://github.com/Open-LLM-VTuber/OLV-Docker-Config
 
 然后，在网页右上角，点击 `Code` -> `Download ZIP` 下载 docker 用户配置, 如下图。
 
-![](docker_img/download_docker_conf_repo.png)
-
+![](/docker_img/download_docker_conf_repo.png)
 
 ## 修改配置文件
 如果自己有想修改的配置，就修改配置文件`conf.yaml`。
@@ -68,7 +67,7 @@ git clone https://github.com/Open-LLM-VTuber/OLV-Docker-Config
 
 点击 "Download Docker Desktop"
 
-![alt text](docker_img/download_docker_desktop.png)
+![alt text](/docker_img/download_docker_desktop.png)
 
 根据电脑类型选择对应版本
 
@@ -112,7 +111,7 @@ git clone https://github.com/Open-LLM-VTuber/OLV-Docker-Config
 
 点击顶部菜单的 **Search** 图标（或使用快捷键 `Ctrl + K`(Windows)或者`Cmd + K`(MacOS)）。
 
-![alt text](docker_img/click_search.png)
+![alt text](/docker_img/click_search.png)
 
 在搜索框中输入以下内容，搜索到以后点击右侧的**Pull**按钮。
 
@@ -120,7 +119,7 @@ git clone https://github.com/Open-LLM-VTuber/OLV-Docker-Config
 openllmvtuber/open-llm-vtuber:latest
 ```
 
-![alt text](docker_img/openllmvtuber_image.png)
+![alt text](/docker_img/openllmvtuber_image.png)
 
 ### 配置 LLM
 :::info 关于调用LLM的方式
@@ -158,17 +157,17 @@ openllmvtuber/open-llm-vtuber:latest
 ### 运行 Docker 容器
 
 点击**Images**, 找到**openllmvtuber/open-llm-vtuber**, 点击右侧的运行按钮。
-![alt text](docker_img/run_image.png)
+![alt text](/docker_img/run_image.png)
 
 点开"Optional settings", 按照下图配置，
-![alt text](docker_img/container_config_cn.png)
+![alt text](/docker_img/container_config_cn.png)
 
 ### 在浏览器打开web界面
 等到出现这几行字，如下图，就说明启动成功了。第一次拉取会比较慢，因为要安装一些必要工具，请耐心等待。
-![](docker_img/docker_run_success.png)
+![](/docker_img/docker_run_success.png)
 
 点击左上角的 `12393:12393`，如下图，或者在浏览器输入 `http://localhost:12393`
-![](docker_img/click_12393.png)
+![](/docker_img/click_12393.png)
 
 **恭喜你，成功了**，和你的虚拟伴侣对话吧！
 
