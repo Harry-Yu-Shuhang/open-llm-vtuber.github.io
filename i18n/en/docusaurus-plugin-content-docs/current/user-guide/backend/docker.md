@@ -10,7 +10,7 @@ import TabItem from '@theme/TabItem';
 ## Download configuration files
 
 ### Git clone (for users familiar with git)
-First, [install git following the Quick Start](/docs/quick-start.md#安装-git), then download the Docker user configuration:
+First, [install git following the Quick Start](../../quick-start.md#install-git), then download the Docker user configuration:
 
 ```bash
 git clone https://github.com/Open-LLM-VTuber/OLV-Docker-Config
@@ -48,7 +48,7 @@ Two installation methods are supported currently:
 :::
 
 :::caution About GPU support
-Currently **only CPU and Nvidia GPU** are supported. Nvidia GPUs require proper Nvidia driver configuration. If you haven't set it up yet, please [**click here to view the setup guide in Quick Start**](/docs/quick-start.md#nvidia-gpu-支持).
+Currently **only CPU and Nvidia GPU** are supported. Nvidia GPUs require proper Nvidia driver configuration. If you haven't set it up yet, please [**click here to view the setup guide in Quick Start**](../../quick-start.md#nvidia-gpu-support).
 
 If you don't plan to use a GPU and will instead **use API calls** (this is **the best experience for most users**) or use CPU only, you can skip this step.
 :::
@@ -154,7 +154,7 @@ We recommend following these steps to use the default `Ollama` model and avoid e
 </details>
 :::
 
-For more details, refer to the LLM configuration section in [Quick Start](/docs/quick-start.md#3-配置-llm).
+For more details, refer to the LLM configuration section in [Quick Start](/docs/quick-start.md#3-configure-llm).
 
 ### Run the Docker container
 

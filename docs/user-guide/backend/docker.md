@@ -10,7 +10,7 @@ import TabItem from '@theme/TabItem';
 ## 下载配置文件
 
 ### git下载（适合有git基础的用户）
-先[按照Quick Start安装 git](/docs/quick-start.md#安装-git)
+先[按照Quick Start安装 git](../../quick-start.md#安装-git)
 , 然后下载docker用户配置文件:
 
 ```bash
@@ -47,7 +47,7 @@ git clone https://github.com/Open-LLM-VTuber/OLV-Docker-Config
 :::
 
 :::caution 关于GPU支持
-目前**仅支持CPU和Nvidia GPU**, 且GPU需要配置好Nvidia驱动, 如果还没配置好, 请[**点击这里前往Quick Start查看配置攻略**](/docs/quick-start.md#nvidia-gpu-支持)。
+目前**仅支持CPU和Nvidia GPU**, 且GPU需要配置好Nvidia驱动, 如果还没配置好, 请[**点击这里前往Quick Start查看配置攻略**](../../quick-start.md#nvidia-gpu-支持)。
 
 如果您不打算使用GPU，而是**调用api**（这也是**绝大多数用户体验最好的方式**），或者使用CPU，可以忽略此步。
 :::
@@ -151,7 +151,7 @@ openllmvtuber/open-llm-vtuber:latest
 </details>
 :::
 
-更多注意事项，可以参考 [Quick Start 里的配置 LLM 部分](/docs/quick-start.md#3-配置-llm)。
+更多注意事项，可以参考 [Quick Start 里的配置 LLM 部分](../../quick-start.md#3-配置-llm)。
 
 
 ### 运行 Docker 容器

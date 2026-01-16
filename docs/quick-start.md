@@ -69,7 +69,7 @@ Groq Whisper API、OpenAI API 等国外大模型/推理平台 API 一般无法�
 Docker是**最适合小白**的部署方式，它可以一键部署所有组件，无需手动配置。
 :::
 
-如果你对 Docker 感兴趣，请移步[Docker 部署指南](/docs/user-guide/backend/docker.md)。
+如果你对 Docker 感兴趣，请移步[Docker 部署指南](./user-guide/backend/docker.md)。
 
 如果不感兴趣，您也可以跳转到常规配置方法，从下一步，也就是[环境准备](#环境准备)步骤开始。
 
