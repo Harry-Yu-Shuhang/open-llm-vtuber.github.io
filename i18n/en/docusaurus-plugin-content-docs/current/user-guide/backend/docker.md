@@ -18,7 +18,7 @@ git clone https://github.com/Open-LLM-VTuber/OLV-Docker-Config
 
 ### Download ZIP (for users without coding experience)
 :::warning 
-This download method cannot be updated later, but it will work right now.
+If you download it this way, the configuration file `conf.yaml` can only be [updated manually](#manual-update).
 :::
 First, [click here to go to the user configuration repository](https://github.com/Open-LLM-Vtuber/OLV-Docker-Config)
 
@@ -217,3 +217,38 @@ docker logs -f open-llm-vtuber-latest
 After the logs show `Uvicorn running on http://0.0.0.0:12393`, open `http://localhost:12393` in your browser to access the web interface.
 
 That's it — you have successfully deployed Open LLM VTuber!
+
+## Update
+
+### Update configuration file
+There are two ways to update: via git or manually.
+
+#### Git update
+Run the following commands in the `OLV-Docker-Config` directory:
+```bash
+git stash
+git pull
+git stash pop
+```
+If there are conflicts, please resolve them manually.
+
+#### Manual update
+Manually compare the new `conf.yaml` with the old `conf.yaml` and copy the parts that need updating into the old `conf.yaml`.
+
+ChatGPT recommends this website: [DiffCheck.ai — YAML Diff Checker](https://diffcheck.ai/yaml), but you can also use any other suitable site.
+
+### Pull the latest image
+If you're using Docker Desktop, click the `Pull` button next to `Image`.
+
+If you're using the terminal, run:
+```bash
+docker pull openllmvtuber/open-llm-vtuber:latest
+```
+
+### Restart the container
+If you're using Docker Desktop, click `Restart` under `Containers`.
+
+If you're using the terminal, run:
+```bash
+docker-compose up -d
+```

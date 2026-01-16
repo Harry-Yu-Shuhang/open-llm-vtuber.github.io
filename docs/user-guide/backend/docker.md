@@ -18,7 +18,8 @@ git clone https://github.com/Open-LLM-VTuber/OLV-Docker-Config
 ```
 
 ### zip下载（适合没有代码基础的用户）
-:::warning 这样下载的话没法更新，但是当下肯定是可以用的。
+:::warning 
+这样下载的话,配置文件`conf.yaml`只能[手动更新](#手动更新)。
 :::
 首先，[点击这里前往用户配置代码仓库](https://github.com/Open-LLM-VTuber/OLV-Docker-Config)
 
@@ -216,3 +217,35 @@ docker logs -f open-llm-vtuber-latest
 
 至此，你就成功部署了 Open LLM VTuber！
 
+## 更新
+### 更新配置文件
+有 git 更新和手动更新两种方式。
+#### git 更新
+在 `OLV-Docker-Config` 目录下运行以下命令：
+```bash
+git stash
+git pull
+git stash pop
+```
+如有冲突请手动处理。
+
+#### 手动更新
+手动对比新版 `conf.yaml` 与旧版 `conf.yaml`的不同，将需要更新的部分复制到旧的 `conf.yaml` 中。 
+
+ChatGPT推荐这个网站 [DiffCheck.ai — YAML Diff Checker](https://diffcheck.ai/yaml)，你也可以自己找合适的网站。
+
+### 拉取最新镜像
+如果用 `Docker Desktop`, 点击 `Image` 旁边的 `Pull` 即可。
+
+如果用终端，运行以下命令：
+```bash
+docker pull openllmvtuber/open-llm-vtuber:latest
+```
+
+### 重启容器
+如果用 `Docker Desktop`, 点击 `Containers` 的 `Restart` 即可。
+
+如果用终端，运行以下命令：
+```bash
+docker-compose up -d
+```
