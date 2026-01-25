@@ -120,6 +120,53 @@ If you want to try other speech recognition models:
 3. Modify the relevant configuration of `sherpa_onnx_asr` according to the instructions in `conf.yaml`
 3. Modify the relevant configuration of `sherpa_onnx_asr` according to the instructions in `conf.yaml`
 
+### Using Fire Red ASR Model
+
+[Fire Red ASR](https://github.com/FireRedTeam/FireRedASR) is a high-quality Chinese-English speech recognition model that is also supported in sherpa-onnx. Compared to the default SenseVoiceSmall model, Fire Red ASR performs better in Chinese-English mixed scenarios.
+
+#### Recommended Users
+- Users who need high-quality Chinese-English mixed recognition
+- Users with high requirements for recognition accuracy
+- Configuration difficulty: Simple
+
+#### Download Model
+
+First, ensure `huggingface_hub` is installed to use the command line for downloading models:
+
+```sh
+uv add huggingface_hub
+```
+
+Use huggingface-cli to download the model:
+
+```sh
+uv run hf download csukuangfj/sherpa-onnx-fire-red-asr-large-zh_en-2025-02-16 --local-dir models/sherpa-onnx-fire-red-asr-large-zh_en-2025-02-16
+```
+
+#### Configuration
+
+Configure the Fire Red ASR model in `conf.yaml`:
+
+```yaml
+asr_config:
+  asr_model: 'sherpa_onnx_asr'
+  
+  sherpa_onnx_asr:
+    model_type: 'fire_red_asr'
+    
+    fire_red_asr_encoder: './models/sherpa-onnx-fire-red-asr-large-zh_en-2025-02-16/encoder.int8.onnx'
+    fire_red_asr_decoder: './models/sherpa-onnx-fire-red-asr-large-zh_en-2025-02-16/decoder.int8.onnx'
+    tokens: './models/sherpa-onnx-fire-red-asr-large-zh_en-2025-02-16/tokens.txt'
+    
+    num_threads: 4
+    provider: 'cpu'  # Options: 'cpu' or 'cuda'
+    use_itn: False
+```
+
+:::info
+If you're using CUDA inference, it's recommended to download the fp16 version of the model for better results. Replace `encoder.int8.onnx` and `decoder.int8.onnx` with their fp16 counterparts in the configuration above.
+:::
+
 ## `fun_asr` (Local)
 
 [FunASR](https://github.com/modelscope/FunASR?tab=readme-ov-file) is a fundamental end-to-end speech recognition toolkit from ModelScope that supports various ASR models. Among them, Alibaba's [FunAudioLLM](https://github.com/FunAudioLLM/SenseVoice) SenseVoiceSmall model performs well in both performance and speed.
