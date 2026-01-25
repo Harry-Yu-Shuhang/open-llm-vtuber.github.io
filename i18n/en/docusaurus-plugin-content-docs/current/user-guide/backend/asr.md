@@ -215,6 +215,11 @@ If you want to use GPU acceleration (NVIDIA GPU users only), you need to install
 - [cuBLAS for CUDA 12](https://developer.nvidia.com/cublas)
 - [cuDNN 8 for CUDA 12](https://developer.nvidia.com/cudnn)
 
+**Installing faster whisper**
+```sh
+uv pip install faster-whisper
+```
+
 If you don't care much about running speed or have a powerful CPU, you can also set the `device` parameter of `faster-whisper` to `cpu` in the `conf.yaml` configuration file. This avoids the hassle of installing NVIDIA dependency libraries.
 
 ```yaml

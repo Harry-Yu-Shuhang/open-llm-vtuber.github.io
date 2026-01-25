@@ -152,6 +152,11 @@ Faster Whisper [不支持 mac GPU 推理](https://github.com/SYSTRAN/faster-whis
 - [cuBLAS for CUDA 12](https://developer.nvidia.com/cublas)
 - [cuDNN 8 for CUDA 12](https://developer.nvidia.com/cudnn)
 
+**安装 Faster Whisper**
+```sh
+uv pip install faster-whisper
+```
+
 如果您不太在意运行速度，或者拥有性能强劲的 CPU，也可以选择在 `conf.yaml` 配置文件中将 `faster-whisper` 的 `device` 参数设置为 `cpu`。这样可以避免安装 NVIDIA 依赖库的麻烦。
 
 ```yaml
