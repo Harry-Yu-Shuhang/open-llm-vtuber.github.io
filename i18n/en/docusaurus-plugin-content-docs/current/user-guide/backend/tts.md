@@ -19,6 +19,56 @@ sherpa-onnx is a powerful inference engine that supports multiple TTS models (in
 For GPU inference (CUDA only), please refer to [CUDA Inference](/docs/user-guide/backend/asr#cuda-inference).
 :::
 
+## Piper TTS (Local & Lightweight and Fast)
+Piper is a fast, local neural text-to-speech system that supports multiple languages and voices. It uses pre-trained ONNX models and can achieve real-time speech synthesis on CPU.
+
+### Installation Steps
+1. Install piper-tts:
+```sh
+uv pip install piper-tts
+```
+
+2. Download model files:
+   - Piper requires trained ONNX model files for speech generation
+   - **Recommended models**:
+     - `zh_CN-huayan-medium` - Chinese (Mandarin)
+     - `en_US-lessac-medium` - English
+     - `ja_JP-natsuya-medium` - Japanese
+   
+   - **Download methods**:
+     - Method : Manual download
+       - Chinese model: [https://huggingface.co/csukuangfj/vits-piper-zh_CN-huayan-medium/tree/main](https://huggingface.co/csukuangfj/vits-piper-zh_CN-huayan-medium/tree/main)
+       - Other models: Search "piper" on [Hugging Face](https://huggingface.co/models) or train your own
+
+   - **File placement**:
+     - Download both `.onnx` and `.onnx.json` files to the `models/piper/` directory
+
+3. Configure in `conf.yaml`:
+```yaml
+piper_tts:
+  model_path: "models/piper/zh_CN-huayan-medium.onnx"  # ONNX model file path
+  speaker_id: 0              # Speaker ID for multi-speaker models (use 0 for single-speaker models)
+  length_scale: 1.0          # Speech rate control (1.0 = normal, >1.0 = slower, <1.0 = faster)
+  noise_scale: 0.667         # Audio variation level (0.0-1.0)
+  noise_w: 0.8               # Speaking style variation level (0.0-1.0)
+  volume: 1.0                # Volume (0.0-1.0)
+  normalize_audio: true      # Whether to normalize audio
+  use_cuda: false            # Whether to use GPU acceleration (requires CUDA support)
+```
+
+1. Set `tts_model: piper_tts` in `conf.yaml`
+
+### Features
+- ✅ Completely local, no internet connection required
+- ✅ Real-time CPU inference, fast speed
+- ✅ Supports multiple languages and voices
+- ✅ Supports GPU acceleration (optional)
+- ✅ Small model files, easy to deploy
+
+:::tip
+For more model options, visit the [Piper Voice Samples page](https://rhasspy.github.io/piper-samples/) to listen and download models for different languages and voices.
+:::
+
 ## pyttsx3 (Lightweight and Fast)
 A simple and easy-to-use local TTS engine that uses the system's default speech synthesizer. We use `py3-tts` instead of the more famous `pyttsx3` because `pyttsx3` seems unmaintained and failed to run on the test computer.
 
