@@ -105,7 +105,7 @@ uv add huggingface_hub
 使用 huggingface-cli 下载模型：
 
 ```sh
-uv run huggingface-cli download csukuangfj/sherpa-onnx-fire-red-asr-large-zh_en-2025-02-16 --local-dir models/sherpa-onnx-fire-red-asr-large-zh_en-2025-02-16
+uv run hf download csukuangfj/sherpa-onnx-fire-red-asr-large-zh_en-2025-02-16 --local-dir models/sherpa-onnx-fire-red-asr-large-zh_en-2025-02-16
 ```
 
 #### 配置使用
