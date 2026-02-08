@@ -7,6 +7,12 @@ import TabItem from '@theme/TabItem';
 
 # Docker Deployment
 
+> For building Docker images locally, refer to the [Docker Local Build Guide](../../development-guide/backend/docker.mdx)
+
+## About Our Docker Team
+We have established the [openllmvtuber team](https://hub.docker.com/orgs/openllmvtuber/members) on Docker Hub.  
+The Docker images are currently maintained by [@Harry_Y](https://github.com/Harry-Yu-Shuhang).  
+
 ## Download configuration files
 
 ### Git clone (for users familiar with git)

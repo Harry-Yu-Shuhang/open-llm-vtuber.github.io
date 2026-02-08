@@ -7,6 +7,11 @@ import TabItem from '@theme/TabItem';
 
 # Docker 部署
 
+> 关于本地构建 docker 镜像，参考 [Docker 本地构建指南](../../development-guide/backend/docker.mdx)
+
+## 关于我们的docker团队
+我们在 docker hub 成立了[openllmvtuber团队](https://hub.docker.com/orgs/openllmvtuber/members)，目前docker镜像由[@Harry_Y](https://github.com/Harry-Yu-Shuhang)维护。
+
 ## 下载配置文件
 
 ### git下载（适合有git基础的用户）
