@@ -8,7 +8,7 @@ sidebar_position: 6
 
 
 ## sherpa-onnx（本地 & 推荐）
-> 自 `v0.5.0-alpha.1` 版本起可用（[PR#50](https://github.com/t41372/Open-LLM-VTuber/pull/50)）
+> 自 `v0.5.0-alpha.1` 版本起可用（[PR#50](https://github.com/Open-LLM-VTuber/Open-LLM-VTuber/pull/50)）
 
 sherpa-onnx 是一个强大的推理引擎，支持多种 TTS 模型（包括 MeloTTS）。项目已内置支持，默认使用 CPU 推理。
 
@@ -185,7 +185,7 @@ uv run tts --list_models
 
 
 ## GPTSoVITS（本地部署，性能适中）
-> 在 [PR #40](https://github.com/t41372/Open-LLM-VTuber/pull/40) 中引入，于 v0.4.0 版本正式发布
+> 在 [PR #40](https://github.com/Open-LLM-VTuber/Open-LLM-VTuber/pull/40) 中引入，于 v0.4.0 版本正式发布
 
 GPT-SoVITS 是一个强大的语音合成引擎，可实现高质量的声音克隆。
 
@@ -271,7 +271,7 @@ stream（流式生成）推荐填 False，因为本项目已包含语音分段�
 :::
 
 ## X-TTS（本地部署、较慢）
-> 自 `v0.2.4` 版本起可用（[PR#23](https://github.com/t41372/Open-LLM-VTuber/pull/23)）
+> 自 `v0.2.4` 版本起可用（[PR#23](https://github.com/Open-LLM-VTuber/Open-LLM-VTuber/pull/23)）
 
 推荐使用 xtts-api-server，提供了清晰的 API 文档且部署相对简单。
 

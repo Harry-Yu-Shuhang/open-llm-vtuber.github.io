@@ -17,8 +17,8 @@ Here are the speech recognition options you can choose from:
 ## `sherpa_onnx_asr` (Local & Project Default)
 
 :::note
-(Added in `v0.5.0-alpha.1` PR: [Add sherpa-onnx support #50](https://github.com/t41372/Open-LLM-VTuber/pull/50))
-(Added in `v0.5.0-alpha.1` PR: [Add sherpa-onnx support #50](https://github.com/t41372/Open-LLM-VTuber/pull/50))
+(Added in `v0.5.0-alpha.1` PR: [Add sherpa-onnx support #50](https://github.com/Open-LLM-VTuber/Open-LLM-VTuber/pull/50))
+(Added in `v0.5.0-alpha.1` PR: [Add sherpa-onnx support #50](https://github.com/Open-LLM-VTuber/Open-LLM-VTuber/pull/50))
 :::
 
 [sherpa-onnx](https://github.com/k2-fsa/sherpa-onnx) is a feature-rich inference tool that can run various speech recognition (ASR) models.

@@ -16,7 +16,7 @@ import TabItem from '@theme/TabItem';
 ## `sherpa_onnx_asr` (本地 & 项目预设)
 
 :::note
-(在 `v0.5.0-alpha.1` 版本的 PR: [Add sherpa-onnx support #50](https://github.com/t41372/Open-LLM-VTuber/pull/50) 中添加)
+(在 `v0.5.0-alpha.1` 版本的 PR: [Add sherpa-onnx support #50](https://github.com/Open-LLM-VTuber/Open-LLM-VTuber/pull/50) 中添加)
 :::
 
 [sherpa-onnx](https://github.com/k2-fsa/sherpa-onnx) 是一个功能丰富的推理工具，能运行多种语音识别(ASR)模型。

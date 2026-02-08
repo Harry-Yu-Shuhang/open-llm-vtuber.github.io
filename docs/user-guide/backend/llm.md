@@ -183,7 +183,7 @@ groq_llm:
 
 ### Claude (`claude_llm`)
 
-在 https://github.com/t41372/Open-LLM-VTuber/pull/35 中，`v0.3.1` 版本添加了对 Claude 的支持。
+在 https://github.com/Open-LLM-VTuber/Open-LLM-VTuber/pull/35 中，`v0.3.1` 版本添加了对 Claude 的支持。
 
 将 `LLM_PROVIDER` 更改为 `claude` 并在 `claude` 下完成设置。
 

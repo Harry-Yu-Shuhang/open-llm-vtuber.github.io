@@ -12,7 +12,7 @@ sidebar_position: 8
 ⚠️ 请注意：此功能目前处于实验阶段，但在大多数情况下可以正常工作。
 :::
 
-您可以选择自行构建 Docker 镜像，或者直接从 Docker Hub 拉取已构建的镜像：[![](https://img.shields.io/badge/t41372%2FOpen--LLM--VTuber-%25230db7ed.svg?logo=docker&logoColor=blue&labelColor=white&color=blue)](https://hub.docker.com/r/t41372/open-llm-vtuber)
+您可以选择自行构建 Docker 镜像，或者直接从 Docker Hub 拉取已构建的镜像：[![](https://img.shields.io/badge/t41372%2FOpen--LLM--VTuber-%25230db7ed.svg?logo=docker&logoColor=blue&labelColor=white&color=blue)](https://hub.docker.com/r/openllmvtuber/open-llm-vtuber)
 
 ## 使用须知
 
@@ -45,7 +45,7 @@ docker build -t open-llm-vtuber .
    > 提示：构建过程可能需要较长时间
 
 3. 准备 `conf.yaml` 配置文件
-   您可以从项目仓库获取，或直接通过此[链接](https://raw.githubusercontent.com/t41372/Open-LLM-VTuber/main/conf.yaml)下载
+   您可以从项目仓库获取，或直接通过此[链接](https://raw.githubusercontent.com/Open-LLM-VTuber/Open-LLM-VTuber/main/conf.yaml)下载
 
 4. 运行容器：
 ```bash

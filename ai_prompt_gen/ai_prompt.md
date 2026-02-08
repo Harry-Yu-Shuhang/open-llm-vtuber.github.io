@@ -1,11 +1,8 @@
 # AI Instructions
 
-你是 Open-LLM-VTuber 项目的 AI 助手。你需要帮助用户解决 Open-LLM-VTuber 相关的问题。你需要在结尾鼓励用户查阅官方文档 `https://open-llm-vtuber.github.io/<文件位置>`，同时明确表示自己只是 AI 助手，可能会出错，鼓励用户查阅文档。
+你是 Open-LLM-VTuber 项目的 AI 助手。你需要帮助用户解决 Open-LLM-VTuber 相关的问题。你需要在结尾鼓励用户查阅官方文档 https://open-llm-vtuber.github.io/
 
 - 如果用户提供的信息不充分，请向用户提问，让用户提供更多信息，或是帮助用户 debug，给出指示。作为一个 Agent，你应当主动向用户获取信息。
-
-你将使用用户使用的语言回答。
-
 ---
 
 # 默认配置文件
@@ -21,7 +18,7 @@
 
 # 系统设置：与服务器初始化相关的设置
 system_config:
-  conf_version: 'v1.1.1' # 配置文件版本
+  conf_version: 'v1.2.1' # 配置文件版本
   host: 'localhost' # 服务器监听的地址，'0.0.0.0' 表示监听所有网络接口；如果需要安全，可以使用 '127.0.0.1'（仅本地访问）
   port: 12393 # 服务器监听的端口
   config_alts_dir: 'characters' # 用于存放替代配置的目录
@@ -29,20 +26,30 @@ system_config:
     live2d_expression_prompt: 'live2d_expression_prompt' # 将追加到系统提示末尾，让 LLM（大型语言模型）包含控制面部表情的关键字。支持的关键字将自动加载到 `[<insert_emomap_keys>]` 的位置。
     # 启用 think_tag_prompt 可让不具备思考输出的 LLM 也能展示内心想法、心理活动和动作（以括号形式呈现），但不会进行语音合成。更多详情请参考 think_tag_prompt。
     # think_tag_prompt: 'think_tag_prompt'
-  group_conversation_prompt: 'group_conversation_prompt' # 当使用群聊时，此提示词将添加到每个 AI 参与者的记忆中。
+    # live_prompt: 'live_prompt'
+    # 当使用群聊时，此提示词将添加到每个 AI 参与者的记忆中。
+    group_conversation_prompt: 'group_conversation_prompt'
+    # 启用 mcp_prompt 可让 LLM 具备通过 MCP（Model Context Protocol）使用工具的能力。
+    # 请注意：mcp_prompt 由 Agent 决定是否使用。
+    mcp_prompt: 'mcp_prompt'
+    # 当AI被要求主动说话时使用的提示词
+    proactive_speak_prompt: 'proactive_speak_prompt'
+    # 用来增强LLM输出可发音文本的提示词
+    # speakable_prompt: 'speakable_prompt'
+    # 额外指导 LLM 如何使用工具的提示词
+    # tool_guidance_prompt: 'tool_guidance_prompt' 
 
 # 默认角色的配置
 character_config:
-  conf_name: 'shizuku-local' # 角色配置文件的名称
-  conf_uid: 'shizuku-local-001' # 角色配置的唯一标识符
-  live2d_model_name: 'shizuku-local' # Live2D 模型名称
-  character_name: 'Shizuku' # 将在群聊中使用，并显示为 AI 的名称。
-  avatar: 'shizuku.png' # 建议使用正方形图像作为头像。将其保存到 avatars 文件夹中。留空则使用角色名称的首字母作为头像。
+  conf_name: 'mao_pro' # 角色配置文件的名称
+  conf_uid: 'mao_pro_001' # 角色配置的唯一标识符
+  live2d_model_name: 'mao_pro' # Live2D 模型名称
+  character_name: 'Mao' # 将在群聊中使用，并显示为 AI 的名称。
+  avatar: 'mao.png' # 建议使用正方形图像作为头像。将其保存到 avatars 文件夹中。留空则使用角色名称的首字母作为头像。
   human_name: 'Human' # 将在群聊中使用，并显示为人类的名称。
 
   # ============== 提示词 ==============
 
-  # 角色设定选项已弃用
   # 只需在下面输入你想使用的人格提示。
   # 如果你想创建多个角色并在它们之间切换，请在 characters 文件夹中添加角色
   persona_prompt: |
@@ -63,37 +70,16 @@ character_config:
         # 例如：
         # 'openai_compatible_llm', 'llama_cpp_llm', 'claude_llm', 'ollama_llm'
         # 'openai_llm', 'gemini_llm', 'zhipu_llm', 'deepseek_llm', 'groq_llm'
-        # 'mistral_llm'
+        # 'mistral_llm', 'lmstudio_llm' 之类的
         llm_provider: 'ollama_llm' # 使用的 LLM 提供商
         # 是否在第一句回应时遇上逗号就直接生成音频以减少首句延迟（默认：True）
         faster_first_response: True
         # 句子分割方法：'regex' 或 'pysbd'
         segment_method: 'pysbd'
-
-      mem0_agent:
-        vector_store:
-          provider: 'qdrant' # 向量存储提供商
-          config:
-            collection_name: 'test' # 集合名称
-            host: 'localhost' # 主机地址
-            port: 6333 # 端口号
-            embedding_model_dims: 1024 # 嵌入模型维度
-
-        # mem0 有自己的 llm 设置，与我们的 llm_config 不同。
-        # 有关更多详细信息，请查看他们的文档
-        llm:
-          provider: 'ollama' # 使用的 LLM 提供商
-          config:
-            model: 'llama3.1:latest' # 使用的模型
-            temperature: 0 # 温度
-            max_tokens: 8000 # 最大令牌数
-            ollama_base_url: 'http://localhost:11434' # Ollama 基础 URL
-
-        embedder:
-          provider: 'ollama' # 使用的嵌入提供商
-          config:
-            model: 'mxbai-embed-large:latest' # 使用的模型
-            ollama_base_url: 'http://localhost:11434' # Ollama 基础 URL
+        # 是否使用 MCP（Model Context Protocol） Plus 以使 LLM 获得使用工具的能力（默认：False）
+        # 'Plus' 意味着它包含了通过 OpenAI API 调用工具的能力。
+        use_mcpp: False
+        mcp_enabled_servers: ["time", "ddg-search"] # 启用的 MCP 服务器
 
       hume_ai_agent:
         api_key: ''
@@ -104,15 +90,36 @@ character_config:
       # MemGPT 配置：MemGPT 暂时被移除
       ##
 
+      letta_agent:
+        host: 'localhost' #主机地址
+        port: 8283 # 端口号
+        id: xxx #letta server运行的Agent的id编号
+        faster_first_response: True
+        # 句子分割方法：'regex' 或 'pysbd'
+        segment_method: 'pysbd'
+        # 一旦选择letta作为agent，那么实际运行时候的llm是在letta上配置的，因此用户需要自己运行letta server
+        # 有关更多详细信息，请查看他们的文档
+
     llm_configs:
       # 一个配置池，用于不同代理中使用的所有无状态 llm 提供商的凭据和连接详细信息
+
+      # 无状态 LLM 模板 (对于非 ChatML 的 LLM, 通常而言不用管这个配置)
+      stateless_llm_with_template:
+        base_url: 'http://localhost:8080/v1'
+        llm_api_key: 'somethingelse'
+        organization_id: null
+        project_id: null
+        model: 'qwen2.5:latest'
+        template: 'CHATML'
+        temperature: 1.0 # value between 0 to 2
+        interrupt_method: 'user'
 
       # OpenAI 兼容推理后端
       openai_compatible_llm:
         base_url: 'http://localhost:11434/v1' # 基础 URL
         llm_api_key: 'somethingelse' # API 密钥
-        organization_id: 'org_eternity' # 组织 ID
-        project_id: 'project_glass' # 项目 ID
+        organization_id: null # 组织 ID
+        project_id: null # 项目 ID
         model: 'qwen2.5:latest' # 使用的模型
         temperature: 1.0 # 温度，介于 0 到 2 之间
         interrupt_method: 'user'
@@ -138,6 +145,11 @@ character_config:
         # 设置为 -1 表示模型将永远保留在内存中（即使退出 open llm vtuber 之后也是）
         keep_alive: -1
         unload_at_exit: True # 退出时从内存中卸载模型
+
+      lmstudio_llm:
+        base_url: 'http://localhost:1234/v1'
+        model: 'qwen2.5:latest'
+        temperature: 1.0 # value between 0 to 2
 
       openai_llm:
         llm_api_key: 'Your Open AI API key' # OpenAI API 密钥
@@ -181,10 +193,12 @@ character_config:
 
     # Faster Whisper 配置
     faster_whisper:
-      model_path: 'distil-medium.en' # 模型路径，distil-medium.en 是一个仅限英语的模型；如果你有好的 GPU，可以使用 distil-large-v3
+      model_path: 'large-v3-turbo' # 模型路径，模型名称，或 hf hub 的模型 id
       download_root: 'models/whisper' # 模型下载根目录
-      language: 'en' # 语言，en、zh 或其他。留空表示自动检测。
+      language: 'zh' # 语言，en、zh 或其他。留空表示自动检测。
       device: 'auto' # 设备，cpu、cuda 或 auto。faster-whisper 不支持 mps
+      compute_type: 'int8'
+      prompt: '' # 提示词，用于辅助生成正确的文本
 
     whisper_cpp:
       # 所有可用模型都列在 https://abdeladim-s.github.io/pywhispercpp/#pywhispercpp.constants.AVAILABLE_MODELS
@@ -193,14 +207,16 @@ character_config:
       print_realtime: False # 是否实时打印
       print_progress: False # 是否打印进度
       language: 'auto' # 语言，en、zh、auto
+      prompt: '' # 提示词，用于辅助生成正确的文本
 
     whisper:
       name: 'medium' # 模型名称
       download_root: 'models/whisper' # 模型下载根目录
       device: 'cpu' # 设备
+      prompt: '' # 提示词，用于辅助生成正确的文本
 
     # FunASR 目前需要在启动时连接互联网以下载/检查模型。您可以在初始化后断开互联网连接。
-    # 或者您可以使用 Faster-Whisper 获得完全离线的体验
+    # 或者您可以使用 sherpa onnx asr 或 Faster-Whisper 获得完全离线的体验
     fun_asr:
       model_name: 'iic/SenseVoiceSmall' # 或 'paraformer-zh'
       vad_model: 'fsmn-vad' # 仅当音频长度超过 30 秒时才需要使用
@@ -216,7 +232,7 @@ character_config:
     # 文档：https://k2-fsa.github.io/sherpa/onnx/index.html
     # ASR 模型下载：https://github.com/k2-fsa/sherpa-onnx/releases/tag/asr-models
     sherpa_onnx_asr:
-      model_type: 'sense_voice' # 'transducer', 'paraformer', 'nemo_ctc', 'wenet_ctc', 'whisper', 'tdnn_ctc'
+      model_type: 'sense_voice' # 'transducer', 'paraformer', 'nemo_ctc', 'wenet_ctc', 'whisper', 'tdnn_ctc', 'sense_voice', 'fire_red_asr'
       # 根据 model_type 选择以下其中一个：
       # --- 对于 model_type: 'transducer' ---
       # encoder: ''        # 编码器模型路径（例如 'path/to/encoder.onnx'）
@@ -224,6 +240,9 @@ character_config:
       # joiner: ''         # 连接器模型路径（例如 'path/to/joiner.onnx'）
       # --- 对于 model_type: 'paraformer' ---
       # paraformer: ''     # paraformer 模型路径（例如 'path/to/model.onnx'）
+      # --- 对于 model_type: 'fire_red_asr' (FireredASR - 高性能中英文识别，支持方言) ---
+      # fire_red_asr_encoder: ''    # 编码器模型路径（例如 'path/to/encoder.onnx'）
+      # fire_red_asr_decoder: ''    # 解码器模型路径（例如 'path/to/decoder.onnx'）
       # --- 对于 model_type: 'nemo_ctc' ---
       # nemo_ctc: ''        # NeMo CTC 模型路径（例如 'path/to/model.onnx'）
       # --- 对于 model_type: 'wenet_ctc' ---
@@ -265,8 +284,20 @@ character_config:
     tts_model: 'edge_tts' # 使用的文本转语音模型
     # 文本转语音模型选项：
     #   'azure_tts', 'pyttsx3_tts', 'edge_tts', 'bark_tts',
-    #   'cosyvoice_tts', 'melo_tts', 'coqui_tts',
+    #   'cosyvoice_tts', 'melo_tts', 'coqui_tts', 'piper_tts',
     #   'fish_api_tts', 'x_tts', 'gpt_sovits_tts', 'sherpa_onnx_tts'
+    #   'minimax_tts', 'elevenlabs_tts', 'cartesia_tts'
+
+    siliconflow_tts:
+      api_url: "https://api.siliconflow.cn/v1/audio/speech"
+      api_key: "your key"  # 用于身份验证的API密钥
+      default_model: "FunAudioLLM/CosyVoice2-0.5B"  # 默认使用的文本转语音模型
+      default_voice: "speech:Dreamflowers:5bdstvc39i:xkqldnpasqmoqbakubom your voice name"  # 默认语音配置，格式为："speech:模型名称:音色ID:您的语音名称"
+      sample_rate: 32000  # 音频采样率（单位：Hz），不同格式支持的采样率不同：opus支持48000Hz；wav/pcm支持8000、16000、24000、32000、44100Hz（默认44100Hz）；mp3支持32000、44100Hz（默认44100Hz）
+      response_format: "mp3"  # 输出音频格式，支持mp3、opus、wav、pcm
+      stream: true
+      speed: 1
+      gain: 0
 
     azure_tts:
       api_key: 'azure-api-key' # Azure API 密钥
@@ -284,6 +315,16 @@ character_config:
       voice: zh-CN-XiaoxiaoNeural # 'en-US-AvaMultilingualNeural' #'zh-CN-XiaoxiaoNeural' # 'ja-JP-NanamiNeural'
 
     # pyttsx3_tts 没有任何配置。
+
+    piper_tts:
+      model_path: 'models/piper/zh_CN-huayan-medium.onnx' # 模型文件路径（.onnx 文件）
+      speaker_id: 0             # 说话人 ID（多说话人模型使用，单说话人模型保持 0）
+      length_scale: 1.0         # 语速控制（0.5 = 快一倍，1.0 = 正常，2.0 = 慢一倍）
+      noise_scale: 0.667        # 音频变化程度（0.0-1.0，越高音频越丰富多变，推荐 0.667）
+      noise_w: 0.8              # 说话风格变化（0.0-1.0，越高说话风格越多样，推荐 0.8）
+      volume: 1.0               # 音量（0.0-1.0，1.0 为正常音量）
+      normalize_audio: true     # 是否归一化音频（推荐启用，使音量更稳定）
+      use_cuda: false           # 是否使用 GPU 加速（需要安装 onnxruntime-gpu）
 
     cosyvoice_tts: # Cosy Voice TTS 连接到 gradio webui
       # 查看他们的文档以了解部署和以下配置的含义
@@ -373,11 +414,55 @@ character_config:
       num_threads: 1 # 计算线程数
       speed: 1.0 # 语速（1.0 为正常）
       debug: false # 启用调试模式（True/False）
+    spark_tts:
+      api_url: 'http://127.0.0.1:6006/' # 初始API地址，使用gradio自带的前端API。地址：https://github.com/SparkAudio/Spark-TTS
+      api_name:  "voice_clone" # 端点名字，可选：voice_clone,voice_creation
+      prompt_wav_upload: "https://uploadstatic.mihoyo.com/ys-obc/2022/11/02/16576950/4d9feb71760c5e8eb5f6c700df12fa0c_6824265537002152805.mp3" # 参考音频地址,api_name: = "voice_clone"时填写
+      gender:  "female" # 生成声线，api_name: = "voice_creation"时填写
+      pitch:  3 # 音高，api_name: = "voice_creation"时填写
+      speed:  3 # 语速，api_name: = "voice_creation"时填写
 
+    openai_tts: # OpenAI 兼容的 TTS（语音合成）接口配置
+      # 如果提供了这些设置，将覆盖 openai_tts.py 文件中的默认值
+      model: 'kokoro' # 服务器预期使用的模型名称（例如 'tts-1'，'kokoro'）
+      voice: 'af_sky+af_bella' # 服务器预期使用的声音名称（例如 'alloy'，'af_sky+af_bella'）
+      api_key: 'not-needed' # 如果服务器需要，可填写 API 密钥
+      base_url: 'http://localhost:8880/v1' # TTS 服务器的基础 URL 地址
+      file_extension: 'mp3' # 音频文件格式（'mp3' 或 'wav'）
+    # 详细文档见：https://platform.minimaxi.com/document/Announcement
+    minimax_tts:
+      group_id: '' # minimax 的 group_id
+      api_key: '' # minimax 的 api_key
+      # 支持的模型: 'speech-02-hd', 'speech-02-turbo'（推荐使用 'speech-02-turbo'）
+      model: 'speech-02-turbo' # minimax 模型名称
+      voice_id: 'female-shaonv' # minimax 语音 id，默认 'female-shaonv'
+      # 自定义发音字典，默认为空。
+      # 示例: '{"tone": ["测试/(ce4)(shi4)", "危险/dangerous"]}'
+      pronunciation_dict: ''
+
+    elevenlabs_tts:
+      api_key: ''
+      voice_id: '' # 来自 ElevenLabs 的语音 ID
+      model_id: 'eleven_multilingual_v2' # 模型 ID（如 eleven_multilingual_v2）
+      output_format: 'mp3_44100_128' # 输出音频格式（如 mp3_44100_128）
+      stability: 0.5 # 语音稳定性（0.0 到 1.0）
+      similarity_boost: 0.5 # 语音相似度增强（0.0 到 1.0）
+      style: 0.0 # 语音风格夸张度（0.0 到 1.0）
+      use_speaker_boost: true # 启用说话人增强以获得更好的质量
+
+    cartesia_tts:
+      api_key: ''
+      voice_id: '' # 来自 Cartesia 的语音 ID
+      model_id: 'sonic-3' # 模型 ID（如 sonic-3）
+      output_format: 'wav' # 输出音频格式（如 wav）
+      language: 'en' # 输出语音的语言（如 en）
+      emotion: 'neutral' # 情感指导
+      volume: 1.0 # 语音音量（0.5 到 2.0）
+      speed: 1.0 # 语音速度（0.6 到 1.5）
 
   # =================== Voice Activity Detection ===================
   vad_config:
-    vad_model: 'silero_vad'
+    vad_model: null
 
     silero_vad:
       orig_sr: 16000 # 原始音频采样率
@@ -402,6 +487,10 @@ character_config:
       translate_audio: False # 警告：请确保翻译引擎配置成功再开启此选项，否则会翻译失败
       translate_provider: 'deeplx' # 翻译提供商, 目前支持 deeplx 或 tencent
 
+      deeplx:
+        deeplx_target_lang: 'JA'
+        deeplx_api_endpoint: 'http://localhost:1188/v2/translate'
+
 
       #  腾讯文本翻译  每月500万字符  记得关闭后付费,需要手动前往 机器翻译控制台 > 系统设置 关闭
       #   https://cloud.tencent.com/document/product/551/35017
@@ -412,6 +501,14 @@ character_config:
         region: 'ap-guangzhou'
         source_lang: 'zh'
         target_lang: 'ja'
+
+# 直播平台集成
+live_config:
+  bilibili_live:
+    # 要监控的B站直播间ID列表（直播间URL中的数字）
+    room_ids: [1991478060]
+    # SESSDATA cookie值（可选，用于认证请求，可以查看发送弹幕用户名）
+    sessdata: ""
 
 ```
 
@@ -425,29 +522,42 @@ character_config:
 <!-- PROJECT_DIRECTORY_STRUCTURE -->
 
 ## File: Open-LLM-VTuber
+├── .cursor
+│   └── rules
+│       └── olv-core-rules.mdc
+├── .gemini
+│   ├── GEMINI.md
+│   └── styleguide.md
 ├── .gitattributes
 ├── .github
 │   ├── FUNDING.yml
 │   ├── ISSUE_TEMPLATE
 │   │   ├── bug---question---get-help---bug---提问---求助.md
 │   │   └── feature-request---功能建议.md
+│   ├── copilot-instructions.md
 │   └── workflows
 │       ├── codeql.yml
 │       ├── create_release.yml
 │       ├── fossa_scan.yml
-│       └── ruff.yml
+│       ├── ruff.yml
+│       └── update-requirements.yml
 ├── .gitignore
 ├── .gitmodules
 ├── .pre-commit-config.yaml
 ├── .python-version
 ├── conf.yaml
+├── CLAUDE.md
+├── CONTRIBUTING.md
 ├── LICENSE
 ├── LICENSE-Live2D.md
 ├── README.CN.md
+├── README.JP.md
+├── README.KR.md
 ├── README.md
 ├── assets
 │   ├── banner.cn.jpg
 │   ├── banner.jpg
+│   ├── banner.kr.jpg
 │   ├── i1.jpg
 │   ├── i1_app_mode.jpg
 │   ├── i2.jpg
@@ -460,6 +570,7 @@ character_config:
 │   ├── mao.png
 │   └── shizuku.png
 ├── backgrounds
+│   ├── README.md
 │   ├── cartoon-night-landscape-moon.jpeg
 │   ├── ceiling-window-room-night.jpeg
 │   ├── cityscape.jpeg
@@ -475,7 +586,7 @@ character_config:
 │   ├── room-interior-illustration.jpeg
 │   └── sdxl-classroom-door-view.jpeg
 ├── characters
-│   ├── en_mashiro.yaml
+│   ├── README.md
 │   ├── en_nuke_debate.yaml
 │   ├── en_unhelpful_ai.yaml
 │   ├── zh_米粒.yaml
@@ -485,6 +596,7 @@ character_config:
 │   ├── conf.ZH.default.yaml
 │   └── conf.default.yaml
 ├── doc
+│   ├── README.md
 │   └── sample_conf
 │       ├── sherpaASRTTS_sense_voice_melo.yaml
 │       ├── sherpaASRTTS_sense_voice_piper_en.yaml
@@ -494,95 +606,74 @@ character_config:
 ├── dockerfile
 ├── live2d-models
 │   ├── mao_pro
-│   │   ├── expressions
-│   │   │   ├── exp_01.exp3.json
-│   │   │   ├── exp_02.exp3.json
-│   │   │   ├── exp_03.exp3.json
-│   │   │   ├── exp_04.exp3.json
-│   │   │   ├── exp_05.exp3.json
-│   │   │   ├── exp_06.exp3.json
-│   │   │   ├── exp_07.exp3.json
-│   │   │   └── exp_08.exp3.json
-│   │   ├── mao_pro.4096
-│   │   │   └── texture_00.png
-│   │   ├── mao_pro.cdi3.json
-│   │   ├── mao_pro.moc3
-│   │   ├── mao_pro.model3.json
-│   │   ├── mao_pro.physics3.json
-│   │   ├── mao_pro.pose3.json
-│   │   └── motions
-│   │       ├── mtn_01.motion3.json
-│   │       ├── mtn_02.motion3.json
-│   │       ├── mtn_03.motion3.json
-│   │       ├── mtn_04.motion3.json
-│   │       ├── special_01.motion3.json
-│   │       ├── special_02.motion3.json
-│   │       └── special_03.motion3.json
+│   │   ├── ReadMe.txt
+│   │   └── runtime
+│   │       ├── expressions
+│   │       │   ├── exp_01.exp3.json
+│   │       │   ├── exp_02.exp3.json
+│   │       │   ├── exp_03.exp3.json
+│   │       │   ├── exp_04.exp3.json
+│   │       │   ├── exp_05.exp3.json
+│   │       │   ├── exp_06.exp3.json
+│   │       │   ├── exp_07.exp3.json
+│   │       │   └── exp_08.exp3.json
+│   │       ├── mao_pro.4096
+│   │       │   └── texture_00.png
+│   │       ├── mao_pro.cdi3.json
+│   │       ├── mao_pro.moc3
+│   │       ├── mao_pro.model3.json
+│   │       ├── mao_pro.physics3.json
+│   │       ├── mao_pro.pose3.json
+│   │       └── motions
+│   │           ├── mtn_01.motion3.json
+│   │           ├── mtn_02.motion3.json
+│   │           ├── mtn_03.motion3.json
+│   │           ├── mtn_04.motion3.json
+│   │           ├── special_01.motion3.json
+│   │           ├── special_02.motion3.json
+│   │           └── special_03.motion3.json
 │   └── shizuku
-│       ├── expressions
-│       │   ├── f01.exp.json
-│       │   ├── f02.exp.json
-│       │   ├── f03.exp.json
-│       │   └── f04.exp.json
-│       ├── motions
-│       │   ├── flickHead_00.mtn
-│       │   ├── flickHead_01.mtn
-│       │   ├── flickHead_02.mtn
-│       │   ├── idle_00.mtn
-│       │   ├── idle_01.mtn
-│       │   ├── idle_02.mtn
-│       │   ├── pinchIn_00.mtn
-│       │   ├── pinchIn_01.mtn
-│       │   ├── pinchIn_02.mtn
-│       │   ├── pinchOut_00.mtn
-│       │   ├── pinchOut_01.mtn
-│       │   ├── pinchOut_02.mtn
-│       │   ├── shake_00.mtn
-│       │   ├── shake_01.mtn
-│       │   ├── shake_02.mtn
-│       │   ├── tapBody_00.mtn
-│       │   ├── tapBody_01.mtn
-│       │   └── tapBody_02.mtn
-│       ├── shizuku.1024
-│       │   ├── texture_00.png
-│       │   ├── texture_01.png
-│       │   ├── texture_02.png
-│       │   ├── texture_03.png
-│       │   ├── texture_04.png
-│       │   └── texture_05.png
-│       ├── shizuku.moc
-│       ├── shizuku.model.json
-│       ├── shizuku.physics.json
-│       ├── shizuku.pose.json
-│       └── sounds
-│           ├── flickHead_00.mp3
-│           ├── flickHead_01.mp3
-│           ├── flickHead_02.mp3
-│           ├── pinchIn_00.mp3
-│           ├── pinchIn_01.mp3
-│           ├── pinchIn_02.mp3
-│           ├── pinchOut_00.mp3
-│           ├── pinchOut_01.mp3
-│           ├── pinchOut_02.mp3
-│           ├── shake_00.mp3
-│           ├── shake_01.mp3
-│           ├── shake_02.mp3
-│           ├── tapBody_00.mp3
-│           ├── tapBody_01.mp3
-│           └── tapBody_02.mp3
-├── merge_configs.py
+│       ├── ReadMe.txt
+│       └── runtime
+│           ├── motion
+│           │   ├── 01.motion3.json
+│           │   ├── 02.motion3.json
+│           │   ├── 03.motion3.json
+│           │   └── 04.motion3.json
+│           ├── shizuku.1024
+│           │   ├── texture_00.png
+│           │   ├── texture_01.png
+│           │   ├── texture_02.png
+│           │   ├── texture_03.png
+│           │   └── texture_04.png
+│           ├── shizuku.cdi3.json
+│           ├── shizuku.moc3
+│           ├── shizuku.model3.json
+│           ├── shizuku.physics3.json
+│           └── shizuku.pose3.json
+├── mcp_servers.json
 ├── model_dict.json
 ├── pixi.lock
 ├── prompts
+│   ├── README.md
 │   ├── __init__.py
 │   ├── prompt_loader.py
 │   └── utils
 │       ├── concise_style_prompt.txt
 │       ├── group_conversation_prompt.txt
 │       ├── live2d_expression_prompt.txt
-│       └── think_tag_prompt.txt
+│       ├── live_prompt.txt
+│       ├── mcp_prompt.txt
+│       ├── proactive_speak_prompt.txt
+│       ├── speakable_prompt.txt
+│       ├── think_tag_prompt.txt
+│       └── tool_guidance_prompt.txt
 ├── pyproject.toml
+├── requirements-bilibili.txt
+├── requirements.txt
 ├── run_server.py
+├── scripts
+│   └── run_bilibili_live.py
 ├── src
 │   └── open_llm_vtuber
 │       ├── __init__.py
@@ -594,6 +685,7 @@ character_config:
 │       │   │   ├── agent_interface.py
 │       │   │   ├── basic_memory_agent.py
 │       │   │   ├── hume_ai.py
+│       │   │   ├── letta_agent.py
 │       │   │   └── mem0_llm.py
 │       │   ├── input_types.py
 │       │   ├── output_types.py
@@ -603,7 +695,8 @@ character_config:
 │       │   │   ├── llama_cpp_llm.py
 │       │   │   ├── ollama_llm.py
 │       │   │   ├── openai_compatible_llm.py
-│       │   │   └── stateless_llm_interface.py
+│       │   │   ├── stateless_llm_interface.py
+│       │   │   └── stateless_llm_with_template.py
 │       │   ├── stateless_llm_factory.py
 │       │   └── transformers.py
 │       ├── asr
@@ -626,6 +719,7 @@ character_config:
 │       │   ├── asr.py
 │       │   ├── character.py
 │       │   ├── i18n.py
+│       │   ├── live.py
 │       │   ├── main.py
 │       │   ├── stateless_llm.py
 │       │   ├── system.py
@@ -641,8 +735,23 @@ character_config:
 │       │   ├── single_conversation.py
 │       │   ├── tts_manager.py
 │       │   └── types.py
+│       ├── live
+│       │   ├── bilibili_live.py
+│       │   └── live_interface.py
 │       ├── live2d_model.py
+│       ├── mcpp
+│       │   ├── json_detector.py
+│       │   ├── mcp_client.py
+│       │   ├── server_registry.py
+│       │   ├── tool_adapter.py
+│       │   ├── tool_executor.py
+│       │   ├── tool_manager.py
+│       │   ├── types.py
+│       │   └── utils
+│       │       └── path.py
 │       ├── message_handler.py
+│       ├── proxy_handler.py
+│       ├── proxy_message_queue.py
 │       ├── routes.py
 │       ├── server.py
 │       ├── service_context.py
@@ -656,15 +765,22 @@ character_config:
 │       │   ├── __init__.py
 │       │   ├── azure_tts.py
 │       │   ├── bark_tts.py
+│       │   ├── cartesia_tts.py
 │       │   ├── coqui_tts.py
 │       │   ├── cosyvoice2_tts.py
 │       │   ├── cosyvoice_tts.py
 │       │   ├── edge_tts.py
+│       │   ├── elevenlabs_tts.py
 │       │   ├── fish_api_tts.py
 │       │   ├── gpt_sovits_tts.py
 │       │   ├── melo_tts.py
+│       │   ├── minimax_tts.py
+│       │   ├── openai_tts.py
+│       │   ├── piper_tts.py
 │       │   ├── pyttsx3_tts.py
 │       │   ├── sherpa_onnx_tts.py
+│       │   ├── siliconflow_tts.py
+│       │   ├── spark_tts.py
 │       │   ├── tts_factory.py
 │       │   ├── tts_interface.py
 │       │   └── x_tts.py
@@ -681,6 +797,22 @@ character_config:
 │       │   └── vad_interface.py
 │       └── websocket_handler.py
 ├── upgrade.py
+├── upgrade_codes
+│   ├── __init__.py
+│   ├── compare_yaml.py
+│   ├── config_sync.py
+│   ├── from_version
+│   │   ├── __init__.py
+│   │   └── v_1_1_1.py
+│   ├── upgrade_core
+│   │   ├── __init__.py
+│   │   ├── comment_diff_fn.py
+│   │   ├── comment_sync.py
+│   │   ├── constants.py
+│   │   ├── language.py
+│   │   └── upgrade_utils.py
+│   ├── upgrade_manager.py
+│   └── version_manager.py
 ├── uv.lock
 └── web_tool
     ├── README.md
@@ -695,36 +827,6 @@ character_config:
 
 This is a collection of all documentation files for AI reference.
 
-
-
-================================================================================
-## File: ../docs/download.md
-
----
-sidebar_position: 6
----
-
-# 下载
-
-在这里，你可以下载 Open LLM VTuber 的不同版本。
-
-## 桌面客户端 (Electron)
-
-桌面客户端提供了最佳的本地使用体验，包括窗口模式和桌宠模式。
-
-- **[下载 Windows 版本 (.exe)](https://open-llm-vtuber-frontend.s3.ap-northeast-1.amazonaws.com/open-llm-vtuber-1.2.0-setup.exe)**
-  - :warning: 首次运行时可能会遇到安全警告，请参考 [安全警告说明](./user-guide/frontend/mode.md#关于安全警告) 进行操作。
-
-- **[下载 macOS 版本 (.dmg)](https://open-llm-vtuber-frontend.s3.ap-northeast-1.amazonaws.com/open-llm-vtuber-1.2.0.dmg)**
-  - :warning: 首次打开时可能会遇到安全警告，请参考 [安全警告说明](./user-guide/frontend/mode.md#关于安全警告) 进行操作。
-
-## Web 版本 (自托管)
-
-如果你希望自行部署或在服务器上运行 Web 版本，可以下载此打包文件。
-
-- **[下载 Web Pack (.zip)](https://open-llm-vtuber-frontend.s3.ap-northeast-1.amazonaws.com/open-llm-vtuber-web-1.2.0.zip)**
-  - 此版本适用于希望自行托管 Web 界面的用户。你需要先运行后端服务，然后将此包解压并部署到 Web 服务器。
-  - 关于 Web 模式的更多信息，请参考 [Web 模式使用指南](./user-guide/frontend/web.md)。
 
 
 ================================================================================
@@ -883,6 +985,9 @@ Error calling the chat endpoint
 ## 网页/客户端相关
 
 ### Web 显示 `{"detail": "Not Found"}` 怎么办
+
+![](img/faq/detail-not-found.jpg)
+
 - 前端代码没有被拉取到本地。出现这个报错说明你没有获取到完整的项目代码。请在项目目录下运行 `git submodule update --init --recursive` 来拉取项目代码。
 - 详细请参考 [快速开始/1. 获取项目代码](quick-start#1-获取项目代码) 中提到的两种获取项目代码的方式。
 
@@ -914,12 +1019,6 @@ Error calling the chat endpoint
 - 需要不断点击才能使说话功能正常运行
 - 详细说明请参考[模式介绍](./user-guide/frontend/mode.md)
 
-### Electron 应用切换模式导致屏幕一片空白怎么办
-- 属于小概率难以修复的 bug，实测几乎不会触发。
-- 等待几秒，或者重启应用即可解决。
-
-### 模型表情无法显示怎么办
-
 
 
 ================================================================================
@@ -942,17 +1041,17 @@ sidebar_position: 1
 本项目仍处于早期阶段，目前正在**积极开发中**。
 :::
 
-**Open-LLM-VTuber** 是一款独特的**语音交互 AI 伴侣**，它不仅支持**实时语音对话**和**视觉感知**，还配备了生动的 **Live2D 形象**。所有功能都可以在你的电脑上完全离线运行！
+**Open-LLM-VTuber** 是一款功能强大的**语音交互 AI 伴侣**，它不仅支持**实时语音对话**、**视觉感知**和**多工具调用**，还配备了生动的 **Live2D 形象 (支持 Cubism 5)**。它甚至可以**控制你的浏览器**为你执行任务，并接入**直播平台**与观众互动！所有核心功能都可以在你的电脑上完全离线运行！
 
-你可以把它当作你的专属 AI 伴侣 —— 无论你想要一个`虚拟女友`、`男友`、`萌宠`还是其他角色，它都能满足你的期待。项目完美支持 `Windows`、`macOS` 和 `Linux` 系统，并提供两种使用方式：网页版和桌面客户端（特别支持**透明背景的桌宠模式**，让 AI 伴侣在屏幕上的任意位置时刻陪伴着你）。
+你可以把它当作你的专属 AI 伴侣 —— 无论你想要一个`虚拟女友`、`男友`、`智能助手`还是其他角色，它都能满足你的期待。项目完美支持 `Windows`、`macOS` 和 `Linux` 系统，并提供两种使用方式：网页版和桌面客户端（支持中文界面，并提供**透明背景的桌宠模式**）。
 
-虽然长期记忆功能暂时下线（即将回归），但得益于聊天记录的持久化存储，你随时都能继续之前未完的对话，不会丢失任何珍贵的互动瞬间。
+借助基于 **Letta** 的**长期记忆**系统和聊天记录持久化存储，AI 能够记住过去的对话，让你随时都能继续之前未完的对话，不会丢失任何珍贵的互动瞬间。
 
-在后端支持方面，我们集成了丰富多样的 LLM 对话引擎、文本转语音模型和语音识别方案。如果你想让 AI 伴侣更有个性，还可以参考 [角色定制指南](https://open-llm-vtuber.github.io/docs/user-guide/live2d) 来自定义专属的 AI 伴侣形象和人设。
+我们集成了丰富多样的 LLM、TTS、ASR 方案，并支持通过 **MCP 协议**调用外部工具（如网络搜索、时间查询等）。如果你想让 AI 伴侣更有个性，还可以参考 [角色定制指南](user-guide/live2d) 来自定义专属的 AI 伴侣形象和人设。
 
 关于为什么叫 `Open-LLM-Vtuber` 而不是 `Open-LLM-Companion` 或者 `Open-LLM-Waifu`，是因为项目的开发初衷是采用可在 Windows 以外平台离线运行的开源方案，复现闭源的 AI Vtuber `neuro-sama`。
 
-本项目在 `v1.0.0` 版本后进行了代码重构，目前正处于积极开发阶段，未来还有许多令人兴奋的功能即将推出！🚀 查看我们的 [Roadmap](https://github.com/users/t41372/projects/1/views/5)，了解更新计划。
+本项目正处于积极开发阶段，未来还有许多令人兴奋的功能即将推出！🚀 查看我们的 [Roadmap](https://github.com/users/t41372/projects/1/views/5)，了解更新计划。
 
 
 ## 👀 效果演示
@@ -974,33 +1073,37 @@ sidebar_position: 1
 - 💻 **好看且功能强大的网页和桌面客户端**：提供网页版和桌面客户端两种使用方式，支持丰富的交互功能和个性化设置，桌面客户端还可以在窗口模式和桌宠模式之间自由切换，让 AI 伴侣随时陪伴在身边
 
 - 🎯 **高级交互功能**：
-  - 👁️ 视觉感知，支持摄像头、屏幕录制和截图，让 AI 伙伴能看到你和你的屏幕
-  - 🎤 语音打断，无需耳机（AI 不会听到自己的声音）
-  - 👥 群组聊天，支持多个 AI 角色同时参与对话交互
-  - 🫱 触摸反馈，可以通过点击或拖拽与 AI 伙伴互动
-  - 😊 Live2D 表情，设置情绪映射让后端控制模型表情
-  - 🐱 宠物模式，支持透明背景全局置顶和鼠标穿透 - 可以将你的 AI 伙伴拖到屏幕上的任意位置
-  - 🗣️ AI 主动说话功能
-  - 💭 AI 内心 OS，AI 的表情、想法和动作可以被看到，但不会被读出来
-  - 💾 聊天记录持久化，可以随时切换到以前的对话
-  - 🌍 TTS 翻译支持（例如，用中文聊天的同时，AI 使用日语声音）
+  - 👁️ **视觉感知**：支持摄像头、屏幕录制和截图，让 AI 伙伴能看到你和你的屏幕。
+  - 🛠️ **工具调用 (MCP 支持)**：AI 可以调用支持 MCP 协议的外部工具（如搜索、时间查询）来完成任务，前端实时显示工具调用状态。
+  - 🌐 **浏览器控制**：AI 可以操作浏览器执行任务，并支持在前端实时查看浏览器画面。
+  - 🔴 **直播对接**：内置 BiliBili 直播客户端，可接收弹幕并与观众互动。也可以灵活实现接口，接入其他直播平台或者制定自己的弹幕处理逻辑。
+  - 🧠 **长期记忆**：基于 Letta 实现长期记忆，让 AI 记住过去的对话。
+  - 🎤 **语音打断**：无需耳机即可打断 AI 发言（AI 不会听到自己的声音）。
+  - 👥 **群组聊天**：支持多个 AI 角色同时参与对话交互。
+  - 👆 **Live2D 交互 (Cubism 5)**：支持最新的 Cubism 5 模型，通过点击与 AI 伙伴互动，表情可通过后端控制。
+  - 🐱 **桌宠模式**：支持透明背景、全局置顶和鼠标穿透 - 可以将你的 AI 伙伴拖到屏幕上的任意位置
+  - 🗣️ **AI 主动说话**：AI 可以根据设定主动发起对话。
+  - 🤔 **AI 内心 OS**：AI 的表情、想法和动作可以被看到，但不会被读出来。
+  - 💾 **聊天记录持久化**：可以随时切换到以前的对话。
+  - 🌍 **TTS 翻译支持**：例如，用中文聊天的同时，AI 使用日语声音。
 
 - 🧠 **广泛的模型支持**：
-  - 🤖 大语言模型 (LLM)：Ollama、OpenAI（以及任何与 OpenAI 兼容的 API）、Gemini、Claude、Mistral、DeepSeek、智谱、GGUF、LM Studio、vLLM 等
-  - 🎙️ 语音识别 (ASR)：sherpa-onnx、FunASR、Faster-Whisper、Whisper.cpp、Whisper、Groq Whisper、Azure ASR等
-  - 🔊 语音合成 (TTS)：sherpa-onnx、pyttsx3、MeloTTS、Coqui-TTS、GPTSoVITS、Bark、CosyVoice、Edge TTS、Fish Audio、Azure TTS等
+  - 🤖 **大语言模型 (LLM)**：Ollama、OpenAI（及兼容 API）、Gemini、Claude、Mistral、DeepSeek、智谱、GGUF、LM Studio、vLLM 等。
+  - 🎙️ **语音识别 (ASR)**：sherpa-onnx、FunASR、Faster-Whisper、Whisper.cpp、Whisper、Groq Whisper、Azure ASR 等。
+  - 🔊 **语音合成 (TTS)**：sherpa-onnx、pyttsx3、MeloTTS、Coqui-TTS、GPTSoVITS、Bark、CosyVoice、Edge TTS、Fish Audio、Azure TTS、OpenAI TTS (及兼容 API)、SparkTTS、SiliconFlowTTS等。
 
-- 🔧 **高度可定制**:
-  - ⚙️ **简单的模块配置**：通过简单的配置文件修改，即可切换各种功能模块，无需深入代码
-  - 🎨 **角色随心定制**：导入自定义 Live2D 模型，让你的 AI 伴侣拥有独特外观。通过修改 Prompt，塑造你 AI 伴侣的人设。进行音色克隆，让你的 AI 伴侣有着你想要的声线
-  - 🧩 **Agent自由实现**：继承并实现 Agent 接口，接入任何架构的 Agent，如 HumeAI EVI、OpenAI Her、Mem0 等
-  - 🔌 **良好的可扩展性**：模块化设计让你能轻松添加自己的 LLM、ASR、TTS 等模块实现，随时扩展新特性
+- 🔧 **高度可定制**：
+  - ⚙️ **简单的模块配置**：通过简单的配置文件修改，即可切换各种功能模块，无需深入代码。
+  - 🎨 **角色随心定制**：导入自定义 Live2D 模型，让你的 AI 伴侣拥有独特外观。通过修改 Prompt，塑造你 AI 伴侣的人设。进行音色克隆，让你的 AI 伴侣有着你想要的声线。
+  - 🧩 **Agent自由实现**：继承并实现 Agent 接口，接入任何架构的 Agent，如 HumeAI EVI、OpenAI Her、Mem0 等。
+  - 🔌 **良好的可扩展性**：模块化设计让你能轻松添加自己的 LLM、ASR、TTS、MCP 工具等模块实现，随时扩展新特性。
 
 
 ## 👥 用户评价
 > 感谢开发者把女朋友开源分享出来让大家一起使用
-> 
+>
 > 该女友使用次数已达 10w+
+
 
 ================================================================================
 ## File: ../docs/quick-start.md
@@ -1030,7 +1133,7 @@ import TabItem from '@theme/TabItem';
 :::
 
 :::warning
-本项目只推荐使用 **Chrome 浏览器**。已知 Edge、Safari 等浏览器都存在不同的问题，比如模型表情无法使用。
+本项目只推荐使用 **Chrome 浏览器**。已知 Edge、Safari 等浏览器都存在不同的问题。
 :::
 
 :::danger 关于代理
@@ -1043,7 +1146,7 @@ Groq Whisper API、OpenAI API 等国外大模型/推理平台 API 一般无法�
 :::
 
 :::tip 关于桌面应用
-如果你更喜欢 Electron 应用 (窗口模式 + 桌宠模式)，可以从 [下载页面](/docs/download) 下载对应平台 Electron 客户端，可以在后端服务运行的前提下直接使用。但你有可能会遇到因为没有签名验证而导致的**安全警告**，具体情况和解决方案请查看 [模式介绍](./user-guide/frontend/mode.md)
+如果你更喜欢 Electron 应用 (窗口模式 + 桌宠模式)，可以从 [Open-LLM-VTuber-Web Releases](https://github.com/Open-LLM-VTuber/Open-LLM-VTuber-Web/releases) 下载对应平台 Electron 客户端，可以在后端服务运行的前提下直接使用。但你有可能会遇到因为没有签名验证而导致的**安全警告**，具体情况和解决方案请查看 [模式介绍](./user-guide/frontend/mode.md)
 
 有关前端的更多信息，请参考 [前端指南](./user-guide/frontend/)
 :::
@@ -1221,7 +1324,67 @@ nvcc --version
 从 v1.0.0 版本开始，我们推荐使用 [uv](https://docs.astral.sh/uv/) 作为依赖管理工具。
 
 :::note
-如果你更希望使用 conda 或 venv，也可以使用这些工具。项目完全兼容标准的 pip 安装方式。
+如果你更希望使用 conda 或 venv，也可以使用这些工具。项目自`v1.2.0` 起完全兼容标准的 pip 安装方式。
+
+关于 pip 与 conda 的指南与注意事项
+<details>
+uv 是这个项目的依赖管理工具，我推荐使用 uv。
+
+conda，pip，以及其他的依赖管理工具也可以用，但我们不会测试这些工具，也不会回答这些工具产生的问题 (因为我们 v1.0.0 版本之前用的是 conda，问 python 相关问题的人真的好多啊呱！)。
+
+如果你一定要用，非用不可，请在使用这些工具时重点关注 Python 版本，虚拟环境使用的 Python 执行档等问题，我们在迁移到 uv 之前有很多，很多人遇到了各种各样的问题。
+
+确保你的 Python 版本 >= 3.10, < 3.13。我不确定当前版本与 3.13 的兼容性，你可以试试。
+
+#### 使用 pip 安装项目依赖
+
+> (项目版本 `v1.2.0` 添加)
+
+```sh
+pip install -r requirements.txt
+```
+- 这个 `requirements.txt` 是根据 `pyproject.toml` 文件自动生成出来的，可能会把依赖绑的比较紧。如果出现问题，可以参考 `pyproject.toml` 中声明的依赖版本，自行松绑。亦或是改用 uv 或其他支持以 `pyproject.toml` 声明依赖的工具。
+
+或是
+```sh
+pip install -e .
+```
+- 这个命令会用 pyproject.toml 文件安装依赖，但会把项目本身也一起安装到环境中，我感觉项目更新时有可能会出问题，但我不确定。
+
+
+然后运行项目
+
+```sh
+python run_server.py
+```
+
+之后文档中出现的任何 `uv add`, `uv remove` 命令，可以直接代替换成 `pip install`, `pip uninstall` 等命令。
+
+#### conda
+1. 在当前目录下，创建 conda 环境
+```sh
+conda create -p "./.conda" python=3.10.6
+```
+
+2. 激活这个 conda 环境
+```sh
+conda activate ./.conda
+```
+
+3. 用 pip 安装项目依赖
+```sh
+pip install -r requirements.txt
+```
+
+4. 运行项目
+```sh
+python run_server.py
+```
+
+之后文档中出现的任何 `uv add`, `uv remove` 命令，可以直接代替换成 `pip install`, `pip uninstall` 等命令。
+
+</details>
+
 :::
 
 <Tabs groupId="operating-systems">
@@ -1264,7 +1427,7 @@ source ~/.zshrc   # 如果使用 zsh
 
 更多 uv 安装方法参考：[Installing uv](https://docs.astral.sh/uv/getting-started/installation/)
 
-## 手动部署指南
+## 部署指南
 
 ### 1. 获取项目代码
 
@@ -1277,18 +1440,25 @@ source ~/.zshrc   # 如果使用 zsh
 :::
 
 <Tabs groupId="code-clone-method">
-  <TabItem value="release" label="从 GitHub 下载稳定版本">
-  访问最新的 [release 页面](https://github.com/Open-LLM-VTuber/Open-LLM-VTuber/releases) ，下载类似于 `Open-LLM-VTuber-v1.x.x.zip` 的 zip 文件。
+  <TabItem value="release" label="下载稳定的 release 包">
+  从项目的 [**Release 页面**](https://github.com/Open-LLM-VTuber/Open-LLM-VTuber/releases)，下载长得像 `Open-LLM-VTuber-v1.x.x.zip` 的 zip 文件。
 
-  如果你想使用桌宠模式或桌面客户端版本，你可以从 [下载页面](/docs/download) 下载应用程序。在你配置并成功启动后端服务后，这个桌面客户端可以启动桌宠模式。
+  :::warning
+  注意，是 Release 页面，**不是**项目主页上面那个 Code 按钮的 "Download ZIP" 选项。请不要用 "Download ZIP" 按钮下载项目代码。
+  :::
+
+  如果你想要使用桌宠模式或是桌面版本，你可以顺手再下载以 `open-llm-vtuber-electron` 开头的文件。windows 用户下载 exe，macOS 用户下载 dmg文件。这个是桌面版本的客户端。之后等后端配置完成并启动之后，这个electron 版前端可以启动桌宠模式。
+
   </TabItem>
   <TabItem value="git" label="Git 命令拉取">
   :::warning
   使用 git 拉取时，请确保网络畅通。中国大陆用户可能需要开启代理。
   :::
 
-  :::info
-  自 `v1.0.0` 开始，前端代码 (用户界面) 已被拆分到独立仓库中。我们建立了构建流程，并通过 git submodule 将前端代码链接到主仓库的 `frontend` 目录下，因此在克隆仓库时要像下面这样添加 `--recursive`。
+  :::warning
+  git clone 命令后面必须加上 `--recursive` flag。
+  
+  这是因为自 `v1.0.0` 开始，前端代码 (用户界面) 已被拆分到独立仓库中。我们建立了构建流程，通过 git submodule 将前端代码链接到主仓库的 `frontend` 目录下，因此在克隆仓库时要添加 `--recursive` 的 flag，否则会缺失前端代码，造成 [浏览器显示 Detail Not Found 的错误](faq.md#web-显示-detailnotfound-怎么办)。
   :::
 
   ```bash
@@ -1299,8 +1469,19 @@ source ~/.zshrc   # 如果使用 zsh
   cd Open-LLM-VTuber
   ```
 
-  对于桌宠模式或桌面客户端，请访问 [下载页面](/docs/download) 下载适用于你操作系统的应用程序（Windows 或 macOS）。在你配置并成功启动后端服务后，这个桌面客户端可以启动桌宠模式。
+  如果你想要使用桌宠模式或是桌面版本，你可以前往[Open-LLM-VTuber-Web 的 Release 页面](https://github.com/Open-LLM-VTuber/Open-LLM-VTuber-Web/releases/latest) 顺手再下载以 `open-llm-vtuber-electron` 开头的文件。windows 用户下载 exe，macOS 用户下载 dmg文件。这个是桌面版本的客户端。之后等后端配置完成并启动之后，这个electron 版前端可以启动桌宠模式。
 
+  </TabItem>
+
+  <TabItem value="git-zip" label="不要从 Code 按钮下载 zip">
+  ![don't do this](./img/git-code-zip.jpg)
+
+  请 **不要** 从 GitHub 主页上，那个绿色的 "Code" 按钮那边，下载 Zip 文件，或是直接用那边提供的克隆命令，获取项目代码。
+
+  为什么不能从 Code 按钮下载 Zip 文件?
+  - 从 Code 按钮中获取的 Zip 文件 **不包含 Git 信息**。这是 Github 自己生成的，我没法控制。
+  - 本项目前端由 submodule 链接，如果你从这个按钮下载 Zip 文件，你会拿不到前端代码，导致 [浏览器显示 Detail Not Found 的错误](faq.md#web-显示-detailnotfound-怎么办)
+  - 本项目更新机制依赖 Git，因此缺失 Git 信息**会导致你无法使用更新功能**。
   </TabItem>
 
 </Tabs>
@@ -1362,7 +1543,9 @@ uv run run_server.py
 然后按下 `Ctrl` + `C` 退出程序。
 
 :::info
-`v1.1.0` 版本开始，`conf.yaml` 文件可能不会自动出现在项目目录下。请运行一次项目主程序 `uv run run_server.py` 生成配置文件。
+`v1.1.0` 版本开始，`conf.yaml` 文件可能不会自动出现在项目目录下。请复制 `config_templates` 目录下的 `conf.default.yaml`  或 `conf.ZH.default.yaml` 文件到项目根目录并重命名为 `conf.yaml`。
+
+或者，你也可以通过运行主程序 `uv run run_server.py` 并使用 `Ctrl` + `C` 退出程序来生成配置文件（不推荐使用这个方法）。请注意，退出操作需要及时执行，否则程序会开始下载模型文件（此刻退出可能会导致下次无法启动，解决方案为删除 `models/` 下的全部文件）。
 :::
 
 ### 3. 配置 LLM
@@ -1454,8 +1637,8 @@ uv run run_server.py
 
 运行成功后，浏览器访问 `http://localhost:12393` 即可打开 Web 界面。
 
-:::tip 桌面应用
-如果你更喜欢 Electron 应用（窗口模式+桌宠模式），可以从 [下载页面](/docs/download) 下载客户端应用。在后端服务运行的情况下，可以直接使用。你可能会遇到**安全警告**，这是因为缺少代码签名 - 请查阅 [模式介绍](./user-guide/frontend/mode.md) 了解详情及解决方法。
+:::tip 桌面应用程序
+如果你更倾向于使用 Electron 应用（窗口模式 + 桌宠模式），可以从 [Open-LLM-VTuber-Web Releases](https://github.com/Open-LLM-VTuber/Open-LLM-VTuber-Web/releases) 下载对应平台的 Electron 客户端。该客户端可在后端服务运行时直接使用，你可能会遇到**安全警告**（由于未进行代码签名）——具体说明和解决方案请查阅[模式介绍](./user-guide/frontend/mode.md)。
 
 关于前端的更多信息，请查阅 [前端使用指南](./user-guide/frontend/)
 :::
@@ -1463,9 +1646,10 @@ uv run run_server.py
 
 ## 下一步
 - [常见问题](faq.md)
+- [长期记忆 (Letta)](user-guide/backend/agent#letta-agent)
 - [桌宠模式](user-guide/frontend/mode)
 - [修改 AI 角色的设定(提示词)](user-guide/backend/character_settings.md)
-- [AI 群聊 (目前文档欠缺)]
+- [AI 群聊 (目前文档欠缺)](user-guide/backend/group_chat.md)
 - [修改 Live2D 模型](user-guide/live2d)
 - [修改 LLM 大语言模型](user-guide/backend/llm.md)
 - [修改 TTS 模型 (AI 的声音模型)](user-guide/backend/tts.md)
@@ -1473,7 +1657,10 @@ uv run run_server.py
 - [参与讨论，加入社区](community/contact.md)
 - [参与开发](community/contribute.md)
 
+### 长期记忆?
+`1.2.0` 版本加入了基于 Letta (也就是 MemGPT) 的长期记忆实现 ([PR #179](https://github.com/Open-LLM-VTuber/Open-LLM-VTuber/pull/179))，虽然回答延迟会增加，但能实现效果较好的长期记忆。
 
+详见 [Agent -> Letta Agent 页面](user-guide/backend/agent#letta-agent)
 
 
 ### 如果你的项目目录下没有 `conf.yaml` 文件
@@ -1494,7 +1681,7 @@ uv run run_server.py
 ## File: ../docs/user-guide/live2d.md
 
 ---
-sidebar_position: 4
+sidebar_position: 5
 ---
 
 
@@ -1814,7 +2001,7 @@ AI 会使用 `[emotion]` 格式在对话中触发表情变化，例如：
 ## File: ../docs/user-guide/update.md
 
 ---
-sidebar_position: 5
+sidebar_position: 6
 ---
 
 # 更新项目
@@ -2337,6 +2524,54 @@ Mem0 是一个实验性的长期记忆解决方案。虽然目前仍在开发中
 :::
 
 
+## Letta Agent
+
+### 简介
+
+[Letta](https://github.com/letta-ai/letta) 是有状态的 AI 系统，能够随着时间推移不断演进和学习，保持记忆和行为的一致性，突破了传统 LLM 的限制。Letta 平台整合了可视化开发环境 (ADE)、生产 API 和复杂的服务器运行时，支持创建和部署有状态代理。
+
+简单理解就是可以让大模型拥有长期记忆，自主管理记忆。
+
+同时也可以查看可视化的记忆库，大概包括：
+- `Core Memory`：例如角色的设定，用户的身份信息等
+- `Archival Memory`: 其它的信息
+
+**要在本项目中使用 Letta 实现长期记忆，有以下几个步骤**
+1. 安装，配置，运行Letta
+2. 在Letta 中创建并配置 Agent
+3. 将 Agent 的 ID 填入我们项目的配置文件中。
+
+由于上述步骤具体操作可能发生变化，前两步请参考 Letta 官方文档。
+
+- [这里是Letta的Github地址](https://github.com/letta-ai/letta)
+- [这里是Letta的官方文档](https://docs.letta.com/)
+
+对于 Windows 和 macOS 用户，目前可以尝试使用测试版本的 [Letta Desktop](https://docs.letta.com/install)。除此之外，Letta可以使用Docker部署，也可以从零自己搭环境运行。
+
+
+### 配置文件
+如需使用，请在`agent_config`下的`conversation_agent_choice`替换为`letta_agent`
+
+同时修改以下内容
+```yaml
+letta_agent:
+        host: 'localhost' #主机地址
+        port: 8283 # 端口号
+        id: xxx #letta server运行的Agent的id编号
+        faster_first_response: True
+        # 句子分割方法：'regex' 或 'pysbd'
+        segment_method: 'pysbd'
+```
+
+:::info
+当在config中设置使用`letta_agent`之后，`conf.yaml`中对于`llm`的配置将会失效，最终使用的大模型取决于Letta Server上正在运行的大模型
+:::
+
+:::warning
+当启用Letta之后，暂时不支持发送图片这种多模态信息。
+:::
+
+
 ================================================================================
 ## File: ../docs/user-guide/backend/asr.md
 
@@ -2358,7 +2593,7 @@ import TabItem from '@theme/TabItem';
 ## `sherpa_onnx_asr` (本地 & 项目预设)
 
 :::note
-(在 `v0.5.0-alpha.1` 版本的 PR: [Add sherpa-onnx support #50](https://github.com/t41372/Open-LLM-VTuber/pull/50) 中添加)
+(在 `v0.5.0-alpha.1` 版本的 PR: [Add sherpa-onnx support #50](https://github.com/Open-LLM-VTuber/Open-LLM-VTuber/pull/50) 中添加)
 :::
 
 [sherpa-onnx](https://github.com/k2-fsa/sherpa-onnx) 是一个功能丰富的推理工具，能运行多种语音识别(ASR)模型。
@@ -2367,8 +2602,25 @@ import TabItem from '@theme/TabItem';
 从 `v1.0.0` 版本开始，本项目默认使用 `sherpa-onnx` 运行 `SenseVoiceSmall` (int8 量化) 模型作为语音识别方案。这是一个开箱即用的配置 - 你无需进行任何额外设置，系统会在首次运行时自动下载模型文件并解压到项目的 `models` 目录下。
 :::
 
+### 推荐用户
+- 所有用户 (所以是预设)
+- 但特别是 mac 用户 (因为没啥选择)。
+- 非 N 卡用户。
+- 中文用户。
+- CPU 推理就很快。
+- 配置难度: 不用配置，因为是项目预设
+
+SenseVoiceSmall 模型可能英文一般。
+
 ### CUDA 推理
+
 `sherpa-onnx` 支持 CPU 和 CUDA 推理。虽然预设的 `SenseVoiceSmall` 模型在 CPU 上已经表现不错，但如果您有 NVIDIA GPU，可以通过以下步骤启用 CUDA 推理来获得更好的性能：
+
+[官方文档](https://k2-fsa.github.io/sherpa/onnx/python/install.html#method-2-from-pre-compiled-wheels-cpu-cuda)
+
+:::warning
+注意: sherpa onnx 似乎只支持 CUDA 11.8，但我没有证据。请参考[官方文档](https://k2-fsa.github.io/sherpa/onnx/python/install.html#method-2-from-pre-compiled-wheels-cpu-cuda)，安装 CUDA 11.8 以及获取更多信息。
+:::
 
 1. 首先卸载 CPU 版本的依赖：
 ```sh
@@ -2410,13 +2662,70 @@ uv add onnxruntime-gpu==1.17.1 sherpa-onnx==1.10.39+cuda -f https://k2-fsa.githu
 2. 将模型文件放置在项目的 `models` 目录下
 3. 按照 `conf.yaml` 中的说明修改 `sherpa_onnx_asr` 的相关配置
 
+### 使用 Fire Red ASR 模型
+
+[Fire Red ASR](https://github.com/FireRedTeam/FireRedASR) 是一个高质量的中英文语音识别模型，在 sherpa-onnx 中也得到了支持。相比默认的 SenseVoiceSmall 模型，Fire Red ASR 在中英文混合场景下表现更好。
+
+#### 推荐用户
+- 需要高质量中英文混合识别的用户
+- 对识别准确度要求较高的用户
+- 配置难度: 简单
+
+#### 下载模型
+
+首先确保安装了 `huggingface_hub`，以便使用命令行下载模型：
+
+```sh
+uv add huggingface_hub
+```
+
+使用 huggingface-cli 下载模型：
+
+```sh
+uv run hf download csukuangfj/sherpa-onnx-fire-red-asr-large-zh_en-2025-02-16 --local-dir models/sherpa-onnx-fire-red-asr-large-zh_en-2025-02-16
+```
+
+#### 配置使用
+
+在 `conf.yaml` 中配置 Fire Red ASR 模型：
+
+```yaml
+asr_config:
+  asr_model: 'sherpa_onnx_asr'
+  
+  sherpa_onnx_asr:
+    model_type: 'fire_red_asr'
+    
+    fire_red_asr_encoder: './models/sherpa-onnx-fire-red-asr-large-zh_en-2025-02-16/encoder.int8.onnx'
+    fire_red_asr_decoder: './models/sherpa-onnx-fire-red-asr-large-zh_en-2025-02-16/decoder.int8.onnx'
+    tokens: './models/sherpa-onnx-fire-red-asr-large-zh_en-2025-02-16/tokens.txt'
+    
+    num_threads: 4
+    provider: 'cpu'  # 可选 'cpu' 或 'cuda'
+    use_itn: False
+```
+
+:::info
+如果您使用 CUDA 推理，建议下载 fp16 版本的模型以获得更好的效果。将上述配置中的 `encoder.int8.onnx` 和 `decoder.int8.onnx` 替换为对应的 fp16 版本文件即可。
+:::
+
 ## `fun_asr` (本地)
 
 [FunASR](https://github.com/modelscope/FunASR?tab=readme-ov-file) 是 ModelScope 的一个基础端到端语音识别工具包，支持多种 ASR 模型。其中，阿里的 [FunAudioLLM](https://github.com/FunAudioLLM/SenseVoice) 的 SenseVoiceSmall 模型在性能和速度上都表现不错。
 
 :::tip
 虽然 FunASR 可以运行 SenseVoiceSmall 模型，但我们更推荐使用项目预设的 `sherpa_onnx_asr`。FunASR 项目存在一定的稳定性问题，可能在某些设备上出现异常。
+
+不过 FunASR 对 GPU 的利用更好，所以对于 N 卡用户可能会更快。
 :::
+
+### 推荐用户
+- 有 N 卡，希望利用 GPU 推理 SenseVoiceSmall 模型的用户。
+- 中文用户。
+- CPU 推理就很快。
+- 配置难度: 简单
+
+SenseVoiceSmall 可能英文一般。
 
 ### 安装
 
@@ -2446,23 +2755,91 @@ uv pip install funasr modelscope huggingface_hub torch torchaudio onnx onnxconve
 :::
 
 ## `faster_whisper` (本地)
+- [官方仓库](https://github.com/SYSTRAN/faster-whisper)
 
 这是一个优化版的 Whisper 推理引擎，可以运行原版 Whisper 和 distill whisper 模型。相比原版 Whisper 提供了更快的推理速度，但是无法自动识别语言。
 
 :::info
-在 macOS 系统上，由于只能使用 CPU 运行，性能表现一般。建议在配备 NVIDIA GPU 的设备上使用，可以获得最佳性能。
+Faster Whisper [不支持 mac GPU 推理](https://github.com/SYSTRAN/faster-whisper/issues/911)，只能使用 CPU 运行，性能表现一般。建议在配备 NVIDIA GPU 的设备上使用，可以获得最佳性能。
 :::
+
+### 推荐用户
+- 有 N 卡，希望利用 GPU 推理 Whisper 模型的用户。
+- 非中文用户。Whisper 系列模型多语言支持比较好。
+- CPU 推理比较慢，。
+- 配置难度: 简单
+
+
+### 安装与配置
 
 如果您想使用 GPU 加速（仅限 NVIDIA GPU 用户），需要安装以下 NVIDIA 依赖库。详细的安装步骤请参考[快速开始](/docs/quick-start.md)：
 - [cuBLAS for CUDA 12](https://developer.nvidia.com/cublas)
 - [cuDNN 8 for CUDA 12](https://developer.nvidia.com/cudnn)
 
+**安装 Faster Whisper**
+```sh
+uv pip install faster-whisper
+```
+
 如果您不太在意运行速度，或者拥有性能强劲的 CPU，也可以选择在 `conf.yaml` 配置文件中将 `faster-whisper` 的 `device` 参数设置为 `cpu`。这样可以避免安装 NVIDIA 依赖库的麻烦。
+
+```yaml
+# Faster Whisper 配置
+faster_whisper:
+  model_path: 'large-v3-turbo' # 模型路径，模型名称，或 hf hub 的模型 id
+  download_root: 'models/whisper' # 模型下载根目录
+  language: 'zh' # 语言，en、zh 或其他。留空表示自动检测。
+  device: 'auto' # 设备，cpu、cuda 或 auto。faster-whisper 不支持 mps
+  compute_type: 'int8'
+```
+
+### 模型选择 (model_path)
+`model_path` 可以填入模型名称，模型的本地路径 (如果你提前下载好了)，或是 HuggingFace 上的模型 id (必须是已经转换成 CTranslate2 格式的模型)。
+
+**可以填入的模型名称:**
+
+`tiny`, `tiny.en`, `base`, `base.en`, `small`, `small.en`, `distil-small.en`, `medium`, `medium.en`, `distil-medium.en`, `large-v1`, `large-v2`, `large-v3`, `large`, `distil-large-v2`, `distil-large-v3`, `large-v3-turbo`, `turbo`
+
+distil 系列模型可能只支持英文。
+
+选择的模型会自动从 Hugging Face 上下载到项目目录下 `models/whisper` 文件夹中。
+
+在 4060 上的测试 (感谢 qq 群 Lena 在 [#187](https://github.com/Open-LLM-VTuber/Open-LLM-VTuber/issues/187#issuecomment-2814846254), [#188](https://github.com/Open-LLM-VTuber/Open-LLM-VTuber/pull/188) 提供的测试结果)
+
+> 使用 22 秒生成音频，走 int8 测试13代i5 和 4060 8GB, CUDA 12.8, cuDNN 9.8:
+> - cpu部分是v3-turbo用时5.98秒、small是1.56秒，
+> - 显卡是v3-turbo用时1.04秒、small用时0.48秒。
+> 
+> 总结：
+> - 没有 4060 就选 small，因为 medium 和 v3-turbo 差不多大小，small 可能是比如20系30系保证速度的前提下，识别效果最好的。
+> - 有4060就选v3-turbo，速度没问题的话精度自然越高越好。
+> - 精度参考资料：faster-whisper-small是2.44亿参数，faster-whisper-v3-turbo是8.09亿参数。
+
+在 MacBook Pro m1 pro 上的测试
+> 不用试了，很慢。用带 CoreML 加速的 whisper cpp 或 sense voice small 模型都会快很多。
+
+**Hugging Face 模型 id 格式**
+```
+"username/whisper-large-v3-ct2"
+```
+注意，faster whisper 需要已经转换成 CTranslate2 格式的模型。
+
+选择的模型会自动从 Hugging Face 上下载到项目目录下 `models/whisper` 文件夹中。
+
+
 
 ## `whisper_cpp` (本地)
 - `whipser_cpp` 在 macOS 上可通过 CoreML 加速，实现较快的推理速度
 - 在 CPU 或 NVIDIA GPU 上运行时，性能可能不如 Faster-Whisper
 - Mac 用户请参考下方说明配置支持 CoreML 的 WhisperCPP；如需使用 CPU 或 NVIDIA GPU，只需运行 `pip install pywhispercpp` 安装即可
+
+### 推荐用户
+- mac 用户，希望利用 GPU 推理 Whisper 系列模型的用户。
+- 中文用户。
+- CPU 推理比较慢，得用 GPU 才行。
+- 配置难度: 配 GPU 加速可能有点难。
+
+SenseVoiceSmall 可能英文一般。
 
 ### 安装
 
@@ -2499,12 +2876,23 @@ GGML_VULKAN=1 pip install git+https://github.com/absadiki/pywhispercpp
 
 OpenAI 的原始 Whisper。使用 `uv pip install -U openai-whisper` 安装。推理速度很慢。
 
+### 推荐用户
+- 不推荐
 
-## `groq_whisper_asr` (需要 API 密钥)
 
-Groq 的 Whisper 端点，非常准确（支持多语言）且速度快，并且每天都有很多免费使用次数。它已预安装。从 [groq](https://console.groq.com/keys) 获取 API 密钥并将其添加到 `conf.yaml` 中的 `groq_whisper_asr` 设置中。中国大陆及其他的不支持地区，需要代理（不支持香港地区）才能使用。
+## `groq_whisper_asr` (联网，需要 API 密钥，但注册容易，免费额度慷慨)
 
-## `azure_asr` (需要 API 密钥)
+Groq 的 Whisper 端点，非常准确（支持多语言）且速度快，并且每天都有很多免费使用次数。它已预安装。从 [groq](https://console.groq.com/keys) 获取 API 密钥并将其添加到 `conf.yaml` 中的 `groq_whisper_asr` 设置中。中国大陆及其他的不支持地区，需要代理（可能不支持香港地区）才能使用。
+
+### 推荐用户
+- 接受使用联网语音识别的用户
+- 多语言用户
+- 不做本地运算，速度非常快 (取决你的网速)
+- 配置难度: 简单
+
+SenseVoiceSmall 可能英文一般。
+
+## `azure_asr` (联网，需要 API 密钥)
 
 - Azure 语音识别。
 - 在 `azure_asr` 选项下配置 API key 和地区
@@ -2512,6 +2900,12 @@ Groq 的 Whisper 端点，非常准确（支持多语言）且速度快，并且
 :::warning
 `api_key.py` 在 `v0.2.5` 之后已弃用。请在 `conf.yaml` 中设置 API 密钥。
 :::
+
+### 推荐用户
+- 有 Azure API key 的人 (Azure 账号不太好注册)
+- 多语言用户
+- 不做本地运算，速度非常快 (取决你的网速)
+- 配置难度: 简单
 
 
 ================================================================================
@@ -2608,7 +3002,7 @@ character_config:
 sidebar_position: 2
 ---
 
-# 配置文件
+# 配置文件 (Config)
 
 下图是 `v1.0.0` 版本 配置文件的基本结构。
 
@@ -2665,7 +3059,7 @@ sidebar_position: 8
 ⚠️ 请注意：此功能目前处于实验阶段，但在大多数情况下可以正常工作。
 :::
 
-您可以选择自行构建 Docker 镜像，或者直接从 Docker Hub 拉取已构建的镜像：[![](https://img.shields.io/badge/t41372%2FOpen--LLM--VTuber-%25230db7ed.svg?logo=docker&logoColor=blue&labelColor=white&color=blue)](https://hub.docker.com/r/t41372/open-llm-vtuber)
+您可以选择自行构建 Docker 镜像，或者直接从 Docker Hub 拉取已构建的镜像：[![](https://img.shields.io/badge/t41372%2FOpen--LLM--VTuber-%25230db7ed.svg?logo=docker&logoColor=blue&labelColor=white&color=blue)](https://hub.docker.com/r/openllmvtuber/open-llm-vtuber)
 
 ## 使用须知
 
@@ -2698,7 +3092,7 @@ docker build -t open-llm-vtuber .
    > 提示：构建过程可能需要较长时间
 
 3. 准备 `conf.yaml` 配置文件
-   您可以从项目仓库获取，或直接通过此[链接](https://raw.githubusercontent.com/t41372/Open-LLM-VTuber/main/conf.yaml)下载
+   您可以从项目仓库获取，或直接通过此[链接](https://raw.githubusercontent.com/Open-LLM-VTuber/Open-LLM-VTuber/main/conf.yaml)下载
 
 4. 运行容器：
 ```bash
@@ -2897,7 +3291,7 @@ groq_llm:
 
 ### Claude (`claude_llm`)
 
-在 https://github.com/t41372/Open-LLM-VTuber/pull/35 中，`v0.3.1` 版本添加了对 Claude 的支持。
+在 https://github.com/Open-LLM-VTuber/Open-LLM-VTuber/pull/35 中，`v0.3.1` 版本添加了对 Claude 的支持。
 
 将 `LLM_PROVIDER` 更改为 `claude` 并在 `claude` 下完成设置。
 
@@ -2978,77 +3372,74 @@ CMAKE_ARGS="-DGGML_BLAS=ON -DGGML_BLAS_VENDOR=OpenBLAS" uv pip install llama-cpp
 ================================================================================
 ## File: ../docs/user-guide/backend/remote.md
 
-# 远程部署，非本地部署，手机
+# 远程部署与跨设备访问指南
 
+本指南适用于以下场景：
+- 在远程服务器上部署 Open-LLM-VTuber，并通过本地设备访问。
+- 在局域网内部署 Open-LLM-VTuber，并允许其他设备（如手机）访问。
+- 将 Open-LLM-VTuber 服务暴露给公网访问（**强烈不推荐**，详见下文安全警告）。
 
-如果你
-- 尝试在远程服务器上运行 Open-LLM-VTuber，在本地访问
-- 尝试在局域网内运行 Open-LLM-VTuber，让其他设备访问 (比如手机)
-- 尝试把你的 Open-LLM-VTuber 公开给全世界使用
+进行远程部署或跨设备访问时，请注意以下配置要点：
 
-这里有一些注意事项:
+### 修改后端 `host` 设置为 `0.0.0.0`
+默认配置下，后端服务绑定的地址是 `localhost`，这仅允许本机访问。若需允许其他设备通过 IP 地址访问，必须将 `host` 参数修改为 `0.0.0.0`。
 
+### 强制使用 HTTPS 与 WSS 协议
+Open-LLM-VTuber 的前端是一个 Web 应用。根据[浏览器的安全策略](https://developer.mozilla.org/en-US/docs/Web/API/MediaDevices/getUserMedia)，在非安全环境（HTTP）下无法访问麦克风设备。这将导致前端出现 "VAD error" 错误，语音识别功能无法正常使用。
 
-### 请把后端设置中的 `host` 改成 `0.0.0.0`
-预设绑定的 `localhost` 会让你的 Open-LLM-VTuber 只能被本机访问。想要其他设备访问，就得改成 `0.0.0.0`，这样其他设备才能用你这台机器的 ip 地址访问。
+![非安全环境下麦克风访问受限导致的 VAD error](img/vad_error.jpg)
 
+为确保功能正常，必须为您的服务配置 HTTPS 证书，并使用 `https://` 和 `wss://` 协议访问前端和 WebSocket 服务。
 
-### 请使用 https 和 wss
-
-Open-LLM-VTuber 的前端是网页应用，由于[浏览器的安全限制](https://developer.mozilla.org/en-US/docs/Web/API/MediaDevices/getUserMedia)，麦克风会打不开，前端会因此显示 vad error。
-
-![在不安全环境下无法启动麦克风导致的 vad error](img/vad_error.jpg)
-
-### 访问前端时，请在前端设置正确的 `WebSocket URL` 和 `Base URL`
-前端页面打开后左上角有个设置按钮，请正确设置 `WebSocket URL` 和 `Base URL` 的参数，把协议 (就是开头的东西) 改成 https 和 wss，接着把 ip 改成后端的 ip，接着你应该就能看到背景被正确加载，且页面上的连接状态变成了绿色。
+### 配置前端连接参数
+访问前端页面时，点击左上角的设置按钮，确保 `WebSocket URL` 和 `Base URL` 参数配置正确：
+- 将协议（URL 开头部分）修改为 `https://` 和 `wss://`。
+- 将 IP 地址修改为后端服务的实际 IP 地址或域名。
+正确配置后，页面背景应能正常加载，且连接状态指示灯显示为绿色。
 
 ![](./img/url_settings.jpg)
 
+### 关于移动端访问
+对于移动设备访问，推荐使用专为手机设计的 [Open-LLM-VTuber-Unity](https://github.com/Open-LLM-VTuber/Open-LLM-VTuber-Unity) 项目。
+- 请注意：目前该项目不支持 iOS 平台，因为缺乏苹果开发者账号进行应用签名。
 
-### 手机访问?
-移动端，推荐使用 [Open-LLM-VTuber-Unity](https://github.com/Open-LLM-VTuber/Open-LLM-VTuber-Unity) 项目，是专门设计给手机使用的，可以看看。
-- 目前不支持 iOS，因为我们没有苹果开发者账号，没办法给应用签名。
+不推荐直接使用手机浏览器访问 Web 前端的原因如下：
+- **iOS 限制**：iOS 系统要求每次音频播放都必须由明确的用户交互触发。这意味着 AI 每生成一句语音，用户都需要点击屏幕一次才能播放。
+- **Android 兼容性**：Android 平台的浏览器内核多样，可能存在兼容性问题。推荐使用最新版本的 Google Chrome 手机版以获得最佳体验。
 
-为什么不推荐用手机浏览器直接访问呢？
-- 由于 iOS 系统限制，每次 AI 说话的时候都必须要用明确的用户交互，所以 AI 每说一句话，你就得点一次屏幕，否则它说不出来。
-- 安卓浏览器由于浏览器内核繁多，可能有些浏览器会出现兼容性问题，推荐使用 Google Chrome 手机版访问。
+### 安全警告：请勿将 Open-LLM-VTuber 服务直接暴露于公网
+本项目并非为公开部署而设计，存在潜在的安全风险。强烈建议不要将服务直接暴露在公共互联网上。
 
+开放服务端口（包括 Ollama 等依赖服务的端口）可能导致未授权访问和资源滥用。已有公开列表收集开放 Ollama 端口的服务器信息，允许他人免费使用这些资源。本项目的安全防护措施有限，请务必重视此风险。
 
+对于需要远程访问的场景，推荐使用 Cloudflare Tunnel、Tailscale 等工具建立安全的访问通道，而非直接开放端口。
 
-### 请不要公开你的 Open-LLM-VTuber 页面
-我们项目并不是为了公开部署设计的，有相当多的安全漏洞，请不要公开到公网。
+如果您不熟悉网络安全配置，请不必过于担心。只要您在本地计算机上运行服务，并仅通过 `localhost` 访问，通常不会受到外部攻击。上述警告主要针对在服务器或 NAS 等设备上进行部署的用户。
 
-如果可以的话，请不要开放端口，别忘了公开 Ollama 端口的教训。如果你不知道的话，有不少网站会扫描所有开放着 Ollama 端口的服务器，给你一个列表，让你白嫖 ollama 的服务，甚至可以选地区。你也不希望出现在拿个列表上吧？
+## 局域网部署是否需要 HTTPS 证书？
+是的，即使在不公开的局域网内部署，由于浏览器的安全限制，通常也需要配置 HTTPS 证书才能正常使用麦克风。获取证书的方式包括：
+1.  **自签名证书**：创建和使用自己签发的证书。浏览器可能会提示安全警告。
+2.  **通过域名申请证书 (DNS-01 Challenge)**：如果您拥有域名，可以使用 DNS 验证方式申请受信任的 SSL 证书，此过程无需公网 IP 或开放端口。
 
-我们项目的开发资源远不如 Ollama，在安全方面约等于没有。请不要公开你的 Open-LLM-VTuber 端口。有很多工具能在不公开服务给全世界的状况下愉快访问服务器，比如 Cloudflare tunnel，tailscale 之类的。
+这两种方法的配置相对复杂，此处不作详细展开。
 
-如果你完全不懂网络，看到上面那串字觉得很慌，你没必要慌，这只针对哪些玩 NAS，自部署，服务器的人。你在自己电脑上跑运行在 `localhost` 上的 Open-LLM-VTuber 没人打的了你。
+## 绕过 HTTPS 限制的方法 (未经测试)
 
-
-## 所以局域网运行也需要证书？不公开的局域网可以有证书？
-有两种方式，可能有更多方式，但我不熟悉
-1. 自签名证书
-2. 如果你有域名的话，申请证书可以使用 DNS-01 Challenge，可以不用有公网地址，也不用开放端口。
-
-这两种方法都比较复杂，这里不赘述。
-
-
-## 一些绕开 https 的方法 (未经测试):
+以下方法或可绕过浏览器的 HTTPS 限制，但未经充分测试，请谨慎使用：
 
 ### SSH 本地端口转发
-如果你能 ssh 到部署 Open-LLM-VTuber 的设备上，可以使用 ssh 本地端口转发，将服务器上的端口映射到本地端口上，使浏览器以为 Open-LLM-VTuber 运行在本地，并放行。
+如果您可以通过 SSH 连接到部署 Open-LLM-VTuber 的设备，可以使用本地端口转发功能。将远程服务器的端口映射到本地，使浏览器认为服务运行在本地，从而放宽安全限制。
 
+执行以下命令（将 `用户名` 和 `远程服务器地址` 替换为实际值）：
 ```sh
 ssh -L 12393:localhost:12393 用户名@远程服务器地址
 ```
+该命令将远程服务器的 `12393` 端口（Open-LLM-VTuber 默认端口）映射到本地的 `12393` 端口。
 
-这个命令的意思是将远程服务器的 12393 端口 (Open-LLM-VTuber 的预设端口) 映射到本地的 12393 端口。
+映射成功后，即可通过 `http://localhost:12393` 访问服务，无需 HTTPS。
 
-映射之后，就可以直接用 `http://localhost:12393` 访问 Open-LLM-VTuber 服务了，不再需要 https 了。
-
-
-### 将服务器 ip 地址添加到浏览器的白名单 (待补充)
-我听说有人可以把 ip 地址和端口添加到浏览器白名单，让浏览器针对 Open-LLM-VTuber 服务放宽不安全环境无法打开麦克风的限制，但我不知道细节，欢迎补充文档。
+### 将服务器 IP 地址添加到浏览器信任列表 (待补充)
+有用户报告称，可以通过将服务器的 IP 地址和端口添加到浏览器的信任站点或放宽特定来源的安全限制，来允许在 HTTP 环境下访问麦克风。具体操作方法因浏览器而异，欢迎社区补充相关文档。
 
 
 ================================================================================
@@ -3060,7 +3451,7 @@ sidebar_position: 1
 
 # 后端架构概览
 
-## 核心组件交互流程
+## 核心组件交互流程 (v1.0.0)
 
 ```mermaid
 sequenceDiagram
@@ -3106,7 +3497,7 @@ sequenceDiagram
     Note over Frontend,Backend: 整个过程支持:<br>1. 中断对话<br>2. 切换角色配置<br>3. 历史记录管理
 ```
 
-## 代码结构
+## 代码结构 (v1.0.0)
 
 ```
 ├── background/                # 背景图片资源目录
@@ -3145,7 +3536,7 @@ sequenceDiagram
 sidebar_position: 7
 ---
 
-# 翻译
+# 翻译 (Translate)
 
 ### 翻译功能
 
@@ -3179,7 +3570,7 @@ sidebar_position: 6
 
 
 ## sherpa-onnx（本地 & 推荐）
-> 自 `v0.5.0-alpha.1` 版本起可用（[PR#50](https://github.com/t41372/Open-LLM-VTuber/pull/50)）
+> 自 `v0.5.0-alpha.1` 版本起可用（[PR#50](https://github.com/Open-LLM-VTuber/Open-LLM-VTuber/pull/50)）
 
 sherpa-onnx 是一个强大的推理引擎，支持多种 TTS 模型（包括 MeloTTS）。项目已内置支持，默认使用 CPU 推理。
 
@@ -3190,6 +3581,62 @@ sherpa-onnx 是一个强大的推理引擎，支持多种 TTS 模型（包括 Me
 :::tip
 如需使用 GPU 推理（仅支持 CUDA），请参考 [CUDA推理](/docs/user-guide/backend/asr#cuda-推理)。
 :::
+
+## Piper TTS（本地 & 轻量快速）
+Piper 是一个快速、本地化的神经网络文本转语音系统，支持多种语言和声音。使用预训练的 ONNX 模型，可在 CPU 上实现实时语音合成。
+
+### 安装步骤
+1. 安装 piper-tts：
+```sh
+uv pip install piper-tts
+```
+
+2. 下载模型文件：
+   - Piper 需要使用经过训练的 ONNX 模型文件来进行语音生成
+   - **推荐模型**：
+     - `zh_CN-huayan-medium` - 中文（普通话）
+     - `en_US-lessac-medium` - 英文
+     - `ja_JP-natsuya-medium` - 日文
+   
+   - **下载方式**：
+     - 方式一：手动下载
+       - 中文模型：[https://huggingface.co/csukuangfj/vits-piper-zh_CN-huayan-medium/tree/main](https://huggingface.co/csukuangfj/vits-piper-zh_CN-huayan-medium/tree/main)
+       - 其他模型：在 [Hugging Face](https://huggingface.co/models) 搜索 "piper" 或自行训练
+     - 方式二：使用命令自动下载（不推荐）
+       ```sh
+       python -m piper.download_voices zh_CN-huayan-medium
+       ```
+
+   
+   - **文件存放**：
+     - 下载 `.onnx` 和 `.onnx.json` 两个文件到 `models/piper/` 目录
+
+3. 在 `conf.yaml` 中配置：
+```yaml
+piper_tts:
+  model_path: "models/piper/zh_CN-huayan-medium.onnx"  # ONNX 模型文件路径
+  speaker_id: 0              # 多说话人模型的说话人 ID（单说话人模型使用 0）
+  length_scale: 1.0          # 语速控制（1.0 为正常速度，>1.0 更慢，<1.0 更快）
+  noise_scale: 0.667         # 音频变化程度（0.0-1.0）
+  noise_w: 0.8               # 说话风格变化程度（0.0-1.0）
+  volume: 1.0                # 音量（0.0-1.0）
+  normalize_audio: true      # 是否标准化音频
+  use_cuda: false            # 是否使用 GPU 加速（需要 CUDA 支持）
+```
+
+4. 在 `conf.yaml` 中设置 `tts_model: piper_tts`
+
+### 特点
+- ✅ 完全本地化，无需网络连接
+- ✅ CPU 实时推理，速度快
+- ✅ 支持多种语言和声音
+- ✅ 支持 GPU 加速（可选）
+- ✅ 模型文件小，易于部署
+
+:::tip
+如需更多模型选择，可访问 [Piper 语音样本页面](https://rhasspy.github.io/piper-samples/) 试听并下载不同语言和声音的模型。
+:::
+
 
 ## pyttsx3（轻量快速）
 简单易用的本地 TTS 引擎，使用系统默认语音合成器。使用 `py3-tts` 而不是更著名的 `pyttsx3`，因为 `pyttsx3` 似乎无人维护，且在测试电脑上无法运行。
@@ -3300,7 +3747,7 @@ uv run tts --list_models
 
 
 ## GPTSoVITS（本地部署，性能适中）
-> 在 [PR #40](https://github.com/t41372/Open-LLM-VTuber/pull/40) 中引入，于 v0.4.0 版本正式发布
+> 在 [PR #40](https://github.com/Open-LLM-VTuber/Open-LLM-VTuber/pull/40) 中引入，于 v0.4.0 版本正式发布
 
 GPT-SoVITS 是一个强大的语音合成引擎，可实现高质量的声音克隆。
 
@@ -3386,7 +3833,7 @@ stream（流式生成）推荐填 False，因为本项目已包含语音分段�
 :::
 
 ## X-TTS（本地部署、较慢）
-> 自 `v0.2.4` 版本起可用（[PR#23](https://github.com/t41372/Open-LLM-VTuber/pull/23)）
+> 自 `v0.2.4` 版本起可用（[PR#23](https://github.com/Open-LLM-VTuber/Open-LLM-VTuber/pull/23)）
 
 推荐使用 xtts-api-server，提供了清晰的 API 文档且部署相对简单。
 
@@ -3421,6 +3868,261 @@ uv pip install fish-audio-sdk
 :::tip
 `conf.yaml` 中默认使用的是 neuro-sama 同款语音
 :::
+
+## SiliconFlow TTS（在线、需 API 密钥）  
+硅基流动提供的在线文本转语音服务，支持自定义音频模型和音色配置。  
+
+### 配置步骤  
+1. **上传音频**：  
+   硅基流动目前有FunAudioLLM/CosyVoice2-0.5B，需要上官网上传参考音频，网址如下：
+   https://docs.siliconflow.cn/cn/api-reference/audio/upload-voice。  
+
+3. **填写 `conf.yaml` 配置**：  
+   在配置文件的 `siliconflow_tts` 段落中，按以下格式填写参数（示例）：  
+
+```yaml
+siliconflow_tts:
+  api_url: "https://api.siliconflow.cn/v1/audio/speech"  # 服务端点，固定值
+  api_key: "sk-yourkey"  # 官网获取的API密钥
+  default_model: "FunAudioLLM/CosyVoice2-0.5B"  # 音频模型名称（支持列表见官网）
+  default_voice: "speech:Dreamflowers:aaaaaaabvbbbasdas"  # 音色ID，需在官网上传自定义音色后获取
+  sample_rate: 32000  # 输出采样率，声音异常时可尝试调整（如16000、44100）
+  response_format: "mp3"  # 音频格式（mp3/wav等）
+  stream: true  # 是否启用流式传输
+  speed: 1  # 语速（0.5~2.0，1为默认）
+  gain: 0  # 音量增益
+```
+
+## MiniMax TTS（在线、需要API密钥）
+MiniMax提供的在线的TTS服务，`speech-02-turbo`等模型具有强大的TTS性能，并且可以自由定制音色。
+
+### 配置步骤
+1. **获取`group_id`和`api_key`**
+  您可以通过Minimax官网注册来获取`group_id`和`api_key`，[官方教程文档](https://platform.minimaxi.com/document/Fast)
+
+2. **填写`conf.yaml`配置**
+  在配置文件的 `minimax_tts` 段落中，按以下格式填写参数（示例）：
+```yaml
+    minimax_tts:
+      group_id: '' # 你在 Minimax官网获取到 的 group_id
+      api_key: '' # 你在 Minimax官网获取到 的 api_key
+      # 支持的模型: 'speech-02-hd', 'speech-02-turbo'（推荐使用 'speech-02-turbo'）
+      model: 'speech-02-turbo' # minimax 模型名称
+      voice_id: 'female-shaonv' # minimax 语音 id，默认 'female-shaonv'
+      # 自定义发音字典，默认为空。
+      # 示例: '{"tone": ["测试/(ce4)(shi4)", "危险/dangerous"]}'
+      pronunciation_dict: ''
+```
+其中`voice_id`是可以配置的声音音色，具体的支持声音列表可以查看[官方文档中查询可用声音ID的部分](https://platform.minimaxi.com/document/get_voice)。`pronunciation_dict`是可以支持的自定义发声规则，比如您可以把`牛肉`发音为`neuro`，可以用类似示例的方法来定义这个发声规则。
+
+## ElevenLabs TTS (在线，需要API密钥)
+> 自版本 `v1.2.1` 起可用
+
+ElevenLabs 提供高质量、自然流畅的文本转语音服务，支持多种语言和声音克隆功能。
+
+### 功能特点
+- **高质量音频**：行业领先的语音合成质量
+- **多语言支持**：支持英语、中文、日语、韩语等多种语言
+- **声音克隆**：上传音频样本进行声音克隆
+- **丰富的语音库**：提供多种预设语音和社区语音
+- **实时生成**：低延迟语音合成
+
+### 配置步骤
+1. **注册并获取API密钥**
+   - 访问 [ElevenLabs](https://elevenlabs.io/) 注册账户
+   - 从 ElevenLabs 控制台获取您的 API 密钥
+
+2. **选择语音**
+   - 在 ElevenLabs 控制台中浏览可用语音
+   - 复制您喜欢的语音的 Voice ID
+   - 您也可以上传音频样本进行声音克隆
+
+3. **配置 `conf.yaml`**
+   在配置文件的 `elevenlabs_tts` 段落中，按以下格式填写参数：
+
+```yaml
+elevenlabs_tts:
+  api_key: 'your_elevenlabs_api_key'  # 必需：您的 ElevenLabs API 密钥
+  voice_id: 'JBFqnCBsd6RMkjVDRZzb'   # 必需：ElevenLabs 语音 ID
+  model_id: 'eleven_multilingual_v2'  # 模型 ID（默认：eleven_multilingual_v2）
+  output_format: 'mp3_44100_128'      # 输出音频格式（默认：mp3_44100_128）
+  stability: 0.5                      # 语音稳定性（0.0 到 1.0，默认：0.5）
+  similarity_boost: 0.5               # 语音相似度增强（0.0 到 1.0，默认：0.5）
+  style: 0.0                         # 语音风格夸张度（0.0 到 1.0，默认：0.0）
+  use_speaker_boost: true            # 启用说话人增强以获得更好质量（默认：true）
+```
+
+### 参数说明
+- **api_key**（必需）：您的 ElevenLabs API 密钥
+- **voice_id**（必需）：语音的唯一标识符，在 ElevenLabs 控制台中找到
+- **model_id**：要使用的 TTS 模型。可用选项：
+  - `eleven_multilingual_v2`（默认）- 支持多种语言
+  - `eleven_monolingual_v1` - 仅英语
+  - `eleven_turbo_v2` - 更快的生成速度
+- **output_format**：音频输出格式。常用选项：
+  - `mp3_44100_128`（默认）- MP3，44.1kHz，128kbps
+  - `mp3_44100_192` - MP3，44.1kHz，192kbps
+  - `pcm_16000` - PCM，16kHz
+  - `pcm_22050` - PCM，22.05kHz
+  - `pcm_24000` - PCM，24kHz
+  - `pcm_44100` - PCM，44.1kHz
+- **stability**：控制语音一致性（0.0 = 更多变化，1.0 = 更一致）
+- **similarity_boost**：增强与原始语音的相似度（0.0 到 1.0）
+- **style**：控制风格夸张度（0.0 = 中性，1.0 = 更具表现力）
+- **use_speaker_boost**：启用说话人增强以提高音频质量
+
+### 使用技巧
+- **语音选择**：先尝试预设语音，然后考虑使用声音克隆获得自定义语音
+- **参数调优**：调整 `stability` 和 `similarity_boost` 以获得最佳效果
+- **成本管理**：ElevenLabs 按使用量收费，大量使用前请先测试
+- **网络要求**：需要稳定的网络连接以确保服务可用
+
+:::tip
+ElevenLabs 提供免费试用额度，您可以在购买付费计划前先测试质量。
+:::
+
+
+================================================================================
+## File: ../docs/user-guide/mcp/overview.md
+
+---
+sidebar_position: 1
+---
+
+# MCP 基础教程
+
+## 📄 简介
+
+> MCP（Model Context Protocol，模型上下文协议）是一个开放协议，旨在标准化应用程序向大语言模型（LLM）提供上下文信息的方式。它允许 LLM 与外部工具和服务进行交互，例如搜索引擎、日历、或者控制其他应用程序。
+>
+> 可以将 MCP 视为 AI 应用领域的 USB-C 接口：正如 USB-C 为设备连接各类外设和配件提供了统一标准，MCP 也为 AI 模型连接不同的数据源和工具提供了标准化途径。
+>
+> 在 Open-LLM-VTuber 中，集成 MCP 使得 AI 角色能够利用外部工具来完成更广泛的任务，例如查询实时信息（天气、新闻）、控制智能家居设备（如果配置了相应服务器）等，极大地扩展了 AI 的能力边界。
+>
+> 来源：[MCP 官方文档](https://modelcontextprotocol.io/)
+
+## 🔧 配置 MCP 服务器 (`mcp_servers.json`)
+
+要让 Open-LLM-VTuber 能够启动和管理 MCP 工具服务器，您首先需要在项目根目录下的 `mcp_servers.json` 文件中定义这些服务器。
+
+此文件包含一个 `mcp_servers` 对象，其中的每个键值对代表一个 MCP 服务器的配置。
+
+**配置结构：**
+
+每个服务器配置都需要一个唯一的名称（作为键），并包含以下信息：
+
+-   `command`: 启动服务器所使用的命令（例如 `node`, `uv`, `python`, `npx`, `uvx` 等）。
+-   `args`: 一个包含传递给 `command` 的参数的列表。通常包含服务器脚本的路径、可执行文件名或包名。
+-   `env` (可选): 一个包含所需环境变量及其值的对象。如果服务器需要 API 密钥或其他配置，可以在这里设置。
+
+**示例 (`mcp_servers.json`)：**
+
+```json
+{
+  "mcp_servers": {
+    // 内置服务器配置示例 (通常无需手动添加)
+    "time": {
+      "command": "uvx",
+      "args": ["mcp-server-time", "--local-timezone=Asia/Shanghai"]
+    },
+    "ddg-search": {
+      "command": "uvx",
+      "args": ["duckduckgo-mcp-server"]
+    },
+
+    // 添加自定义服务器示例
+    "stagehand": {
+      "command": "node",
+      "args": [
+        "mcp-server-browserbase/stagehand/dist/index.js" // 脚本路径
+      ],
+      "env": {
+        "BROWSERBASE_API_KEY": "YOUR_API_KEY",
+        "BROWSERBASE_PROJECT_ID": "YOUR_PROJECT_ID",
+        // ... 其他环境变量
+      }
+    },
+    "my_custom_tool": {
+        "command": "python",
+        "args": ["path/to/your/custom_tool_server.py", "--port", "9001"],
+        "env": {
+            "CUSTOM_API_TOKEN": "your_secret_token"
+        }
+    }
+    // ... 其他服务器配置 ...
+  }
+}
+```
+
+**注意：**
+
+-   确保为每个服务器提供唯一的名称（键）。
+-   `args` 中的路径可以是相对于项目根目录的相对路径或绝对路径。
+-   对于使用 `uvx` 或 `npx` 启动的服务器，通常直接在 `args` 中指定包名。
+
+
+
+## ✨ 启用 MCP 功能与指定服务器 (`conf.yaml`)
+
+仅在 `mcp_servers.json` 中定义服务器是不够的，您还需要在 `conf.yaml` 文件中为具体的 AI Agent (目前仅有 `basic_memory_agent` 支持) 启用 MCP 功能，并明确指定该 Agent 可以使用哪些已定义的服务器。
+
+**步骤：**
+
+1.  **定位配置**: 打开 `conf.yaml` 文件，找到您想要配置的角色的 `character_config` -> `agent_config` -> `agent_settings` -> `basic_memory_agent` 部分。
+2.  **启用 MCP**: 将 `use_mcpp` 设置为 `True`。
+3.  **指定服务器**: 添加 `mcp_enabled_servers` 列表，并在其中列出您希望该 Agent 使用的、已在 `mcp_servers.json` 中定义的服务器名称。
+
+**示例 (`conf.yaml`)：**
+
+```yaml
+character_config:
+  # ... 其他配置 ...
+
+  agent_config:
+    conversation_agent_choice: 'basic_memory_agent' # 或其他支持 MCP 的 Agent
+
+    agent_settings:
+      basic_memory_agent:
+        # ... 其他 basic_memory_agent 配置 ...
+
+        # 设置为 True 以启用 MCP 功能
+        use_mcpp: True
+        # 指定此 Agent 可以使用的 MCP 服务器列表
+        # 这些名称必须是在 mcp_servers.json 中定义的键
+        mcp_enabled_servers: ["time", "ddg-search"] # 示例：启用了时间和搜索
+
+# 如果你的 LLM 模型本身不支持 Function Calling / Tools 参数，
+# 你还需要确保在 system_config 中启用了 MCP 提示词：
+system_config:
+  # ... 其他配置 ...
+  
+  tool_prompts:
+    # ... 其他提示词 ...
+    
+    # 确保此行存在且未被注释
+    mcp_prompt: 'mcp_prompt' 
+```
+
+:::info 推荐使用原生支持工具调用的模型
+虽然我们通过 `mcp_prompt` 为不支持工具调用的模型提供了兼容，但强烈推荐使用原生支持 `tools` 或 `function calling` 参数的 LLM（如 GPT、Claude、Gemini、DeepSeek、Grok、以及 Ollama 中的部分模型如 Llama 3, Mistral 等）。原生支持能提供更稳定、可靠的工具调用体验。
+:::
+
+**重要：**
+
+-   只有在 `mcp_enabled_servers` 列表中明确指定的服务器才会被该 Agent 加载和使用。
+-   每次启动应用或切换配置时，系统会实时连接 `mcp_enabled_servers` 中列出的服务器，动态获取其提供的工具信息，并为 LLM 准备好相应的调用格式。不再需要 `servers_prompt.json` 或 `formatted_tools.json` 文件。
+
+
+
+## 🚀 内置服务器
+
+Open-LLM-VTuber 默认在 `mcp_servers.json` 中预配置了一些常用的 MCP 服务器：
+
+-   **`time`**: 提供查询当前时间和日期的功能。
+-   **`ddg-search`**: 基于 DuckDuckGo 搜索引擎，使 AI 能够搜索互联网获取实时信息。
+
+您可以在 `conf.yaml` 的 `mcp_enabled_servers` 列表中直接使用这些名称来启用它们。
+
 
 
 ================================================================================
@@ -3849,6 +4551,8 @@ sidebar_position: 1
 ---
 # 开发指南概览
 
+> **📢 v2.0 开发中**: 我们正在专注于 Open-LLM-VTuber v2.0 的开发 — 这是代码库的全面重写。v2.0 目前正处于早期讨论和规划阶段。请避免提交针对 v1 新功能请求的 issue 或 pull request。如果想参与 v2 的讨论或贡献，请加入我们的开发者社区 [Zulip](https://olv.zulipchat.com)。例会时间将在 Zulip 上公布。我们将继续修复 v1 的 bug 并处理现有的 pull request。
+
 ## 已有指南
 
 - [如何添加新的 TTS 支持?](./backend/tts.mdx)
@@ -3880,17 +4584,18 @@ sidebar_position: 1
 #### 分支说明
 | 分支 | 说明 | 适用人群 |
 |------|------|----------|
-| `dev` | 最新开发进度 | 仅开发者（可能不稳定） |
 | `main` | 预览版本 | 少数尝鲜用户 |
 | `v1-stable` | 稳定版本 | 所有普通用户 |
+
+**`dev` 分支已废弃**
 
 - 合并到 `main` 分支时必须更新版本号
 - `v1-stable` 分支会用于发布，用户更新脚本会同步此分支的最新变化
 - 其他分支多为功能分支或历史遗留
 
 #### 版本发布流程
-1. 新功能在 `dev` 分支开发
-2. 功能稳定后合并到 `main` 分支并增加版本号（如 `v1.0.0-alpha.1` → `v1.0.0-alpha.2`）
+1. 新功能基于 `main` 分支开发
+~~2. 功能稳定后合并到 `main` 分支并增加版本号（如 `v1.0.0-alpha.1` → `v1.0.0-alpha.2`）~~
 3. 累积足够功能后发布稳定版本到 `v1-stable`，写更新日志，发布。
 
 版本号记录在 `pyproject.toml` 中，启动后端时会显示在命令行。注意这与配置文件中的 `conf_version` 不同，后者仅用于记录配置文件结构变化。
@@ -3921,9 +4626,9 @@ sidebar_position: 1
 ### 开发流程
 
 1. Fork 相关仓库
-2. 切换到 `dev` 分支进行开发（项目变化速度较快）
+~~2. 切换到 `dev` 分支进行开发（项目变化速度较快）~~ **请直接基于 `main` 分支开发。dev 分支已经废弃**
 3. 实现功能或修复问题
-4. 提交 PR 到原仓库的 `dev` 分支
+4. 提交 PR 到原仓库的 `main` 分支
 
 如果遇到问题随时可以：
 - 在相关 issue 中提问
@@ -3959,9 +4664,9 @@ sidebar_position: 1
 1. 请参考[前端用户指南/安装部署](/docs/user-guide/frontend/install)获取前端源码
 2. 前端修改合并到前端 `main` 分支前，后端的 `frontend` 子模块不会更新
 3. 开发流程为：
-   - 前端改动先合并到前端 `dev` → `main` 分支
-   - 等待前端 GitHub Action 构建完成（生成 `build` 分支）
-   - 更新后端 `frontend` 子模块的引用
+   - 前端改动先合并到前端 `main` 分支
+   - 改动经过 review 并合并后，GitHub Action 会自动进行构建，并生成 `build` 分支
+   - 后端需要更新 `frontend` 子模块的引用
    - 合并后端改动到对应分支
 
 ### 文档更新
@@ -3974,6 +4679,189 @@ sidebar_position: 1
 
 目前，我们项目的主要贡献者基本都在 QQ 群里面。欢迎加入，一起交流！
 
+
+================================================================================
+## File: ../docs/development-guide/backend/pr_checklist.mdx
+
+---
+sidebar_position: 2
+---
+
+
+`version: 2025.08.03`
+
+# Pull Request 指南与核对清单 (Pull Request Guide & Checklist)
+
+欢迎你为 Open-LLM-VTuber 项目贡献代码！我们非常感谢每一位贡献者的付出。
+
+本指南旨在帮助所有贡献者、维护者和 LLM 更好地协作，确保项目代码的高质量、可维护性和长期健康发展。请在提交 Pull Request (PR) 前以及审查 (Review) 他人 PR 时参考本指南。
+
+我们相信，清晰的规范和流程不仅是维护项目的基石，也是一个绝佳的共同学习机会。
+
+> ⚠️ 下面提到的代码标准主要适用于新的代码提交。旧的代码目前可能过不去类型检查，我们会逐步修复，但这需要一些时间。对于 type checker 报的类型错误，请只关注你的 pr 所负责/修改的部分，保证 A1 (一个 PR 只做一件事) 原则，如果你有帮忙修复的意愿，请单独开 PR。
+> 
+
+## A. 核心原则：原子化提交 (The Golden Rule: Atomic PRs)
+
+这是我们最重要的原则，请务必遵守。
+
+**A1. 一个 PR 只做一件事。**
+
+- **好的例子 👍:**
+    - 修复 Bug A (`fix/bug-a`)。
+    - 实现功能 C (`feat/cccc`)。
+    - 重构`audio_processing`模块 (`refactor/audio_processing`)。
+- **不好的例子 👎:**
+    - 修复了 Bug A、Bug B，并同时实现了新功能 C (`fix-a-b-and-implement-c` )。
+
+**为什么这很重要？**
+
+- **易于审查 (Easy to Review):** 小而专注的 PR 让审查者能更快、更深入地理解你的代码，从而给出更高质量的反馈。
+- **易于追溯 (Easy to Track):** 当未来出现问题时，清晰的 Git 历史能让我们快速定位到是哪个具体的变更引入了问题。
+- **易于回滚 (Easy to Revert):** 如果一个小的变更引入了 Bug，我们可以轻易地将其回滚，而不会影响到其他无关的功能。
+
+---
+
+## B. 贡献者清单：提交我的 PR (Contributor's Checklist: Submitting My PR)
+
+在你提交 PR 前，请逐一确认以下事项。这不仅能极大提高 PR 被合并的速度，也是对你自己和其他协作者负责的表现。
+
+### B1. PR 主题与描述 (PR Title & Description)
+
+- [ ]  **B1.1: 标题清晰 (Clear Title):** 标题应简明扼要地概括 PR 的核心内容。例如 `feat: Add OpenAI TTS support` 或 `fix: Resolve audio stuttering on macOS`。记住，一个 PR 只应该干一件事 (A1)。
+- [ ]  **B2.2: 描述完整 (Complete Description):** 描述区应清晰说明：
+    - **解决了什么问题？(What):** 简述此 PR 的目的和背景。
+    - **为什么需要这个变更？(Why):** 解释其必要性。如果是修复 Bug，最好能链接到相关的 Issue。
+    - **如何实现的？(How):** 简要说明技术实现思路。
+    - **如何测试？(How to Test):** 提供清晰的步骤，让审查者可以复现和验证你的成果。
+
+### B2. 代码质量自查 (Code Quality Self-Check)
+
+- [ ]  **B2.1: 原子性 (Atomicity):** 我的 PR 是否严格遵守了 [**A1**](https://www.google.com/search?q=%23a-%E6%A0%B8%E5%BF%83%E5%8E%9F%E5%88%99%E5%8E%9F%E5%AD%90%E5%8C%96%E6%8F%90%E4%BA%A4-the-golden-rule-atomic-prs) 原则？
+- [ ]  **B2.2: 格式化与静态分析 (Formatting & Linting):** 我是否已经在本地运行并通过了以下命令？
+    - `uv run ruff format`
+    - `uv run ruff check`
+- [ ]  **B2.3: 命名规范 (Naming Conventions):** 所有变量、函数和模块名是否都遵循了 **D3.2**？（即 PEP 8 的 `snake_case` 风格）。
+- [ ]  **B2.4: 类型提示与文档字符串 (Type Hints & Docstrings):**
+    - [ ]  **B2.4.1:** 所有新增或修改的函数是否都包含了符合 **D3.3** 规范的 Type Hint？
+    - [ ]  **B2.4.2:** 所有新增或修改的函数是否都包含了符合 **D3.3** 规范的英文 Docstring？
+- [ ]  **B2.5: 依赖管理 (Dependency Management):** 如果我新增了第三方库，是否已深思熟虑并遵循了 **D5. 依赖管理原则**？
+- [ ]  **B2.6: 跨平台兼容性 (Cross-Platform Compatibility):** 我的代码是否能在 macOS, Windows, Linux 上正常运行？如果引入了平台或 GPU 限定的组件，是否已将其设为可选？
+- [ ]  **B2.7: 注释语言 (Comment Language):** 项目内的代码注释、Docstring、以及控制台输出是否都使用了英文？（i18n 多语言实现除外，但英文必须作为默认存在）。
+
+### B3. 功能与逻辑自查 (Functional & Logical Self-Check)
+
+- [ ]  **B3.1: 功能测试 (Functional Testing):** 我是否已在本地完整测试过我的变更，确保它能正常工作且没有引入新的 Bug？
+- [ ]  **B3.2: 项目目标对齐 (Alignment with Project Goals):** 我的变更是否符合 [**D1. 项目核心目标**](https://www.google.com/search?q=%23d1-%E9%A1%B9%E7%9B%AE%E6%A0%B8%E5%BF%83%E7%9B%AE%E6%A0%87-core-project-goals)，且不与 [**D2. 项目未来目标**](https://www.google.com/search?q=%23d2-%E9%A1%B9%E7%9B%AE%E6%9C%AA%E6%9D%A5%E7%9B%AE%E6%A0%87-future-project-goals) 冲突？
+
+### B4. 文档更新 (Documentation Update)
+
+- [ ]  **B4.1: 文档同步 (Documentation Sync):** 如果我的 PR 引入了新功能、新配置项或任何需要用户了解的变更，我是否已经前往文档仓库 (https://github.com/Open-LLM-VTuber/open-llm-vtuber.github.io) 同步更新了相关的文档？**（没有例外）**
+- [ ]  **B4.2: 添加变更日志条目 (Changelog Entry)**: (可选，但推荐) 在 `CHANGELOG.md` 中，在 "Unreleased" 部分下为你的改动添加一个简短的条目。
+
+---
+
+## C. 维护者清单：审查 PR (Maintainer's Checklist: Reviewing a PR)
+
+为了项目长期的健康，请在 Code Review 时认真检查以下各项。你可以直接引用这些编号 (例如，`"关于 C2.1，我认为这个功能的维护成本可能高于其带来的价值..."`) 来发起讨论。
+
+- [ ]  **C1. 理解变更 (Understand the Change):** 我是否已经完全阅读并理解了这个 PR 的全部代码和意图？
+- [ ]  **C2. 战略对齐 (Strategic Alignment):**
+    - [ ]  **C2.1: 必要性与维护成本 (Necessity vs. Maintenance Cost):** 这个功能是否真的必要？它带来的价值是否能超越我们未来需要付出的维护成本？
+    - [ ]  **C2.2: 核心目标符合度 (Core Goal Alignment):** 是否完全符合 **D1. 项目核心目标**？
+    - [ ]  **C2.3: 未来方向一致性 (Future Goal Alignment):** 是否与 **D2. 项目未来目标和项目 roadmap** 的方向一致或至少不冲突？
+- [ ]  **C3. 实现质量 (Implementation Quality):**
+    - [ ]  **C3.1: 设计优雅性 (Design Elegance):** 代码实现是否足够“简单”、“优雅”？是否存在过度设计或过早优化？
+    - [ ]  **C3.2: 代码可维护性 (Maintainability):** 代码是否模块化、低耦合、易于理解和测试？
+    - [ ]  **C3.3: 技术细节核对 (Technical Detail Check):** 贡献者的自查清单 (**B2, B3, B4**) 中的每一项是否都已达标？（例如：Type Hint 是否准确，Docstring 是否清晰，Ruff 检查是否通过等）。
+- [ ]  **C4. 文档完整性 (Documentation Completeness):** 相关的文档是否已经创建或更新，并且内容清晰准确？
+
+---
+
+## D. 项目参考标准 (Project Reference Standards)
+
+本节详细阐述了我们的核心价值观和技术规范，是上述所有清单的判断依据。
+
+### D1. 项目核心目标 (Core Project Goals)
+
+- **D1.1. 断网运行:** 项目核心功能必须支持完全断网运行。任何需要联网的功能都应是可选模块。
+- **D1.2. 前后端分离:** 严格遵循前后端分离的架构，便于独立开发和维护。
+- **D1.3. 跨平台:** 核心后端组件必须能在 macOS, Windows, Linux 上通过 CPU 运行。任何依赖特定平台或 GPU 的组件都应是可选项。
+- **D1.4. 可更新性:** 用户应能通过更新脚本平滑升级。任何破坏性变更 (Breaking Changes) 都必须伴随主版本号的提升 (例如 v1 -> v2)，并切换到新的发布分支。
+- **D1.5. 可维护性:** 代码必须简单、模块化、解耦、可测试，并遵循最佳实践。
+
+### D2. 项目未来目标 (Future Project Goals)
+
+我们正朝着以下方向努力，所有新的代码贡献都应尽量与这些目标保持一致 (但不强求，下面这些未来目标大概率会在 v2 重构时一起实现)。
+
+- **D2.1. 设置项 GUI 化:** 逐步用 GUI 设置界面取代传统的 `yaml` 配置文件。
+- **D2.2. 插件化架构:** 打造一个插件化的生态系统，通过 Launcher 服务以 GUI 的形式来管理和运行 ASR/TTS/LLM 等模块。
+- **D2.3. 稳定的 API:** 提供稳定、可靠的后端 API 供插件和前端调用。
+- **D2.4. 自动化测试:** 全面推进基于 `pytest` 的自动化测试，新代码应具备良好的可测试性。
+
+### D3. 详细代码规范 (Detailed Coding Standards)
+
+### D3.1. Linter 与 Formatter
+
+我们使用 [Ruff](https://docs.astral.sh/ruff/) 来统一代码风格和检查潜在问题。所有提交的代码都必须通过 `ruff format` 和 `ruff check`。
+
+### D3.2. 命名规范 (Naming Conventions)
+
+- 遵循 Python 的 [PEP 8](https://peps.python.org/pep-0008/) 规范。
+- 使用蛇形命名法 (`snake_case`) 来命名变量、函数和模块。
+- 命名应清晰、易懂、无歧义。避免使用单字母变量名（循环变量除外）。
+
+### D3.3. 类型提示与文档字符串 (Type Hints & Docstrings)
+
+- **为什么重要？** Type Hint 和 Docstring 是代码的“说明书”。它们能帮助：
+    - **其他开发者**快速理解你的代码。
+    - **IDE 和静态分析工具**（如 VSCode, Ruff）进行更智能的错误检查和代码补全。
+    - **未来的你**在几个月后还能看懂自己写的代码。
+- **Type Hint 要求:**
+    - 所有函数/方法的参数和返回值**必须**包含 Type Hint。
+    - 项目以 **Python 3.10+** 为目标。请使用现代语法，例如用 `str | None` 替代 `Optional[str]`，用 `list[str]` 替代 `List[str]`。
+    - Type Hint 必须准确。VSCode 的 Python 类型检查器建议设置为 `basic` 或 `strict` 模式来验证。
+- **Docstring 要求:**
+    - 所有新增或重要修改的公共函数/方法/类**必须**包含英文 Docstring。
+    - 我们推荐使用 [Google 风格的 Docstring](https://www.google.com/search?q=https://google.github.io/styleguide/pyguide.html%233.8-comments-and-docstrings)。它至少应包含：
+        - **摘要 (Summary):** 一行总结函数的作用。
+        - **参数 (Args):** 对每个参数的类型和意义进行说明。
+        - **返回值 (Returns):** 对返回值的类型和意义进行说明。
+    - **示例:**Python
+        
+        ```python
+        def add(a: int, b: int) -> int:
+            """Calculates the sum of two integers.
+        
+            Args:
+                a: The first integer.
+                b: The second integer.
+        
+            Returns:
+                The sum of a and b.
+            """
+            return a + b
+        ```
+        
+
+### D4. 架构设计原则 (Architectural Principles)
+
+- **D4.1. ASR/LLM/TTS 模块设计:**
+    - 当一个库支持多个模型，且不同模型的配置差异巨大时，应优先考虑用户体验和理解成本。
+    - 建议将每个复杂的模型封装成一个独立的模块（例如 `asr-whisper-api`, `asr-funasr`），而不是将整个库作为一个大而全的模块。这样能让用户配置更简单，权责更清晰。
+
+### D5. 依赖管理原则 (Dependency Management)
+
+- **D5.1. 每个新依赖都需深思熟虑。**
+    - 这个功能是否可以通过标准库或已有依赖实现？
+    - 这个依赖的许可证 (License) 是否与我们的项目兼容？
+    - 这个新依赖的社区是否活跃？维护状况如何？安全可信吗？是否会造成供应链投毒的问题？
+
+---
+
+感谢你花时间阅读这份指南。我们期待你的贡献！
+
+最后，关于 Pull Request 的审核流程，请保持耐心。我们项目人手不足，核心维护者也比较忙碌，可能会多花点时间。如果过了很长时间 (1周) 没有收到任何回复，我先说声抱歉，我可能忘了这回事。欢迎在 Pull Request 中 @我 (@t41372) 或相关的维护者来催促我们。
 
 ================================================================================
 ## File: ../docs/development-guide/backend/tts.mdx
@@ -4186,4 +5074,4 @@ sidebar_position: 2
 
 ================================================================================
 
-# Summary: 上面是 25 个项目文档网站的完整内容，请根据文档，回答用户的问题，帮助用户解决问题。
+# Summary: 上面是 26 个项目文档网站的完整内容，请根据文档，回答用户的问题，帮助用户解决问题。

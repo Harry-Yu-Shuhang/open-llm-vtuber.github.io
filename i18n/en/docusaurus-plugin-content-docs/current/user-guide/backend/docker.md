@@ -12,7 +12,7 @@ Due to significant refactoring, the Docker image has not yet been updated to ver
 ⚠️ Please note: This feature is currently in an experimental stage but works normally in most cases.
 :::
 
-You can choose to build the Docker image yourself or pull the pre-built image directly from Docker Hub: [![](https://img.shields.io/badge/t41372%2FOpen--LLM--VTuber-%25230db7ed.svg?logo=docker&logoColor=blue&labelColor=white&color=blue)](https://hub.docker.com/r/t41372/open-llm-vtuber)
+You can choose to build the Docker image yourself or pull the pre-built image directly from Docker Hub: [![](https://img.shields.io/badge/t41372%2FOpen--LLM--VTuber-%25230db7ed.svg?logo=docker&logoColor=blue&labelColor=white&color=blue)](https://hub.docker.com/r/openllmvtuber/open-llm-vtuber)
 
 ## Usage Notes
 
@@ -45,7 +45,7 @@ docker build -t open-llm-vtuber .
    > Note: The build process may take a considerable amount of time
 
 3. Prepare the `conf.yaml` configuration file
-   You can obtain it from the project repository or download it directly via this [link](https://raw.githubusercontent.com/t41372/Open-LLM-VTuber/main/conf.yaml)
+   You can obtain it from the project repository or download it directly via this [link](https://raw.githubusercontent.com/Open-LLM-VTuber/Open-LLM-VTuber/main/conf.yaml)
 
 4. Run the container:
 ```bash

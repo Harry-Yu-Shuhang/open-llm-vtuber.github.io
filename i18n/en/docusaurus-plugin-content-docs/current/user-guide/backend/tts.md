@@ -7,7 +7,7 @@ sidebar_position: 6
 After installing the required dependencies and configuring `conf.yaml`, enable the corresponding speech synthesis engine by modifying the `TTS_MODEL` option in `conf.yaml`.
 
 ## sherpa-onnx (Local & Recommended)
-> Available since version `v0.5.0-alpha.1` ([PR#50](https://github.com/t41372/Open-LLM-VTuber/pull/50))
+> Available since version `v0.5.0-alpha.1` ([PR#50](https://github.com/Open-LLM-VTuber/Open-LLM-VTuber/pull/50))
 
 sherpa-onnx is a powerful inference engine that supports multiple TTS models (including MeloTTS). It is built-in supported and uses CPU inference by default.
 
@@ -175,7 +175,7 @@ uv run tts --list_models
      - This parameter corresponds to `speaker_wav`
 
 ## GPTSoVITS (Local Deployment, Moderate Performance)
-> Introduced in [PR #40](https://github.com/t41372/Open-LLM-VTuber/pull/40), officially released in version v0.4.0
+> Introduced in [PR #40](https://github.com/Open-LLM-VTuber/Open-LLM-VTuber/pull/40), officially released in version v0.4.0
 
 GPT-SoVITS is a powerful speech synthesis engine capable of high-quality voice cloning.
 
@@ -271,7 +271,7 @@ It's recommended to set stream (streaming generation) to False, as this project 
 :::
 
 ## X-TTS (Local Deployment, Relatively Slow)
-> Available since version `v0.2.4` ([PR#23](https://github.com/t41372/Open-LLM-VTuber/pull/23))
+> Available since version `v0.2.4` ([PR#23](https://github.com/Open-LLM-VTuber/Open-LLM-VTuber/pull/23))
 
 It is recommended to use xtts-api-server, which provides clear API documentation and is relatively easy to deploy.
 

@@ -122,7 +122,7 @@ const config: Config = {
         },
         { to: "/blog", label: "Blog", position: "left" },
         {
-          href: "https://github.com/t41372/open-llm-vtuber",
+          href: "https://github.com/Open-LLM-VTuber/open-llm-vtuber",
           label: "GitHub",
           position: "right",
         },
@@ -153,7 +153,7 @@ const config: Config = {
           items: [
             {
               label: "GitHub",
-              href: "https://github.com/t41372/open-llm-vtuber",
+              href: "https://github.com/Open-LLM-VTuber/open-llm-vtuber",
             },
             {
               label: "Discord",
@@ -178,7 +178,7 @@ const config: Config = {
             },
             {
               label: "问题反馈",
-              href: "https://github.com/t41372/open-llm-vtuber/issues",
+              href: "https://github.com/Open-LLM-VTuber/open-llm-vtuber/issues",
             },
           ],
         },
