@@ -16,7 +16,7 @@ import TabItem from '@theme/TabItem';
 ## `sherpa_onnx_asr` (本地 & 项目预设)
 
 :::note
-(在 `v0.5.0-alpha.1` 版本的 PR: [Add sherpa-onnx support #50](https://github.com/t41372/Open-LLM-VTuber/pull/50) 中添加)
+(在 `v0.5.0-alpha.1` 版本的 PR: [Add sherpa-onnx support #50](https://github.com/Open-LLM-VTuber/Open-LLM-VTuber/pull/50) 中添加)
 :::
 
 [sherpa-onnx](https://github.com/k2-fsa/sherpa-onnx) 是一个功能丰富的推理工具，能运行多种语音识别(ASR)模型。
@@ -85,6 +85,53 @@ uv add onnxruntime-gpu==1.17.1 sherpa-onnx==1.10.39+cuda -f https://k2-fsa.githu
 2. 将模型文件放置在项目的 `models` 目录下
 3. 按照 `conf.yaml` 中的说明修改 `sherpa_onnx_asr` 的相关配置
 
+### 使用 Fire Red ASR 模型
+
+[Fire Red ASR](https://github.com/FireRedTeam/FireRedASR) 是一个高质量的中英文语音识别模型，在 sherpa-onnx 中也得到了支持。相比默认的 SenseVoiceSmall 模型，Fire Red ASR 在中英文混合场景下表现更好。
+
+#### 推荐用户
+- 需要高质量中英文混合识别的用户
+- 对识别准确度要求较高的用户
+- 配置难度: 简单
+
+#### 下载模型
+
+首先确保安装了 `huggingface_hub`，以便使用命令行下载模型：
+
+```sh
+uv add huggingface_hub
+```
+
+使用 huggingface-cli 下载模型：
+
+```sh
+uv run hf download csukuangfj/sherpa-onnx-fire-red-asr-large-zh_en-2025-02-16 --local-dir models/sherpa-onnx-fire-red-asr-large-zh_en-2025-02-16
+```
+
+#### 配置使用
+
+在 `conf.yaml` 中配置 Fire Red ASR 模型：
+
+```yaml
+asr_config:
+  asr_model: 'sherpa_onnx_asr'
+  
+  sherpa_onnx_asr:
+    model_type: 'fire_red_asr'
+    
+    fire_red_asr_encoder: './models/sherpa-onnx-fire-red-asr-large-zh_en-2025-02-16/encoder.int8.onnx'
+    fire_red_asr_decoder: './models/sherpa-onnx-fire-red-asr-large-zh_en-2025-02-16/decoder.int8.onnx'
+    tokens: './models/sherpa-onnx-fire-red-asr-large-zh_en-2025-02-16/tokens.txt'
+    
+    num_threads: 4
+    provider: 'cpu'  # 可选 'cpu' 或 'cuda'
+    use_itn: False
+```
+
+:::info
+如果您使用 CUDA 推理，建议下载 fp16 版本的模型以获得更好的效果。将上述配置中的 `encoder.int8.onnx` 和 `decoder.int8.onnx` 替换为对应的 fp16 版本文件即可。
+:::
+
 ## `fun_asr` (本地)
 
 [FunASR](https://github.com/modelscope/FunASR?tab=readme-ov-file) 是 ModelScope 的一个基础端到端语音识别工具包，支持多种 ASR 模型。其中，阿里的 [FunAudioLLM](https://github.com/FunAudioLLM/SenseVoice) 的 SenseVoiceSmall 模型在性能和速度上都表现不错。
@@ -151,6 +198,11 @@ Faster Whisper [不支持 mac GPU 推理](https://github.com/SYSTRAN/faster-whis
 如果您想使用 GPU 加速（仅限 NVIDIA GPU 用户），需要安装以下 NVIDIA 依赖库。详细的安装步骤请参考[快速开始](/docs/quick-start.md)：
 - [cuBLAS for CUDA 12](https://developer.nvidia.com/cublas)
 - [cuDNN 8 for CUDA 12](https://developer.nvidia.com/cudnn)
+
+**安装 Faster Whisper**
+```sh
+uv pip install faster-whisper
+```
 
 如果您不太在意运行速度，或者拥有性能强劲的 CPU，也可以选择在 `conf.yaml` 配置文件中将 `faster-whisper` 的 `device` 参数设置为 `cpu`。这样可以避免安装 NVIDIA 依赖库的麻烦。
 

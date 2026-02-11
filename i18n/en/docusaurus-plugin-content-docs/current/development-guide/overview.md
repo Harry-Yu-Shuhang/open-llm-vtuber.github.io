@@ -3,6 +3,9 @@ sidebar_position: 2
 ---
 # Development Guide Overview
 
+> **📢 v2.0 Development**: We are focusing on Open-LLM-VTuber v2.0 — a complete rewrite of the codebase. v2.0 is currently in its early discussion and planning phase. We kindly ask you to refrain from opening new issues or pull requests for feature requests on v1. To participate in the v2 discussions or contribute, join our developer community on [Zulip](https://olv.zulipchat.com). Weekly meeting schedules will be announced on Zulip. We will continue fixing bugs for v1 and work through existing pull requests.
+
+
 Guides that are done:
 
 - [How to add new TTS support?](./backend/tts.mdx)
@@ -34,17 +37,18 @@ Project version numbers follow **Semantic Versioning**:
 #### Branch Information
 | Branch | Description | Target Audience |
 |------|------|----------|
-| `dev` | Latest development progress | Developers only (may be unstable) |
 | `main` | Preview version | Early adopters |
 | `v1-stable` | Stable version | All regular users |
+
+**The `dev` branch has been deprecated**
 
 - Version number must be updated when merging to the `main` branch
 - The `v1-stable` branch is used for releases, and user update scripts will synchronize with the latest changes in this branch
 - Other branches are mostly feature branches or historical legacy
 
 #### Version Release Process
-1. New features are developed in the `dev` branch
-2. After features stabilize, they are merged into the `main` branch with an increased version number (e.g., `v1.0.0-alpha.1` → `v1.0.0-alpha.2`)
+1. New features are developed based on the `main` branch
+~~2. After features stabilize, they are merged into the `main` branch with an increased version number (e.g., `v1.0.0-alpha.1` → `v1.0.0-alpha.2`)~~
 3. After accumulating enough features, stable versions are released to `v1-stable`, with release notes, and published.
 
 Version numbers are recorded in `pyproject.toml` and displayed in the command line when starting the backend. Note that this is different from the `conf_version` in the configuration file, which is only used to record configuration file structure changes.
@@ -75,9 +79,9 @@ If you want to participate but don't have specific ideas:
 ### Development Process
 
 1. Fork the relevant repository
-2. Switch to the `dev` branch for development (the project changes rapidly)
+~~2. Switch to the `dev` branch for development (the project changes rapidly)~~ **Please develop directly based on the `main` branch. The dev branch has been deprecated**
 3. Implement features or fix issues
-4. Submit a PR to the `dev` branch of the original repository
+4. Submit a PR to the `main` branch of the original repository
 
 If you encounter problems, you can always:
 - Ask questions in the relevant issue
@@ -113,9 +117,9 @@ If you need to modify both frontend and backend code:
 1. Please refer to [Frontend User Guide/Installation and Deployment](/docs/user-guide/frontend/install) to get the frontend source code
 2. Before frontend changes are merged to the frontend `main` branch, the backend's `frontend` submodule will not update
 3. The development process is:
-   - Frontend changes are first merged to the frontend `dev` → `main` branch
-   - Wait for the frontend GitHub Action build to complete (generating the `build` branch)
-   - Update the backend's `frontend` submodule reference
+   - Frontend changes are first merged to the frontend `main` branch
+   - After the changes are reviewed and merged, the GitHub Action will automatically build and generate the `build` branch
+   - The backend needs to update the `frontend` submodule reference
    - Merge backend changes to the corresponding branch
 
 ### Documentation Updates

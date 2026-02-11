@@ -7,7 +7,7 @@ sidebar_position: 7
 After installing the required dependencies and configuring `conf.yaml`, enable the corresponding speech synthesis engine by modifying the `TTS_MODEL` option in `conf.yaml`.
 
 ## sherpa-onnx (Local & Recommended)
-> Available since version `v0.5.0-alpha.1` ([PR#50](https://github.com/t41372/Open-LLM-VTuber/pull/50))
+> Available since version `v0.5.0-alpha.1` ([PR#50](https://github.com/Open-LLM-VTuber/Open-LLM-VTuber/pull/50))
 
 sherpa-onnx is a powerful inference engine that supports multiple TTS models (including MeloTTS). It is built-in supported and uses CPU inference by default.
 
@@ -17,6 +17,56 @@ sherpa-onnx is a powerful inference engine that supports multiple TTS models (in
 
 :::tip
 For GPU inference (CUDA only), please refer to [CUDA Inference](/docs/user-guide/backend/asr#cuda-inference).
+:::
+
+## Piper TTS (Local & Lightweight and Fast)
+Piper is a fast, local neural text-to-speech system that supports multiple languages and voices. It uses pre-trained ONNX models and can achieve real-time speech synthesis on CPU.
+
+### Installation Steps
+1. Install piper-tts:
+```sh
+uv pip install piper-tts
+```
+
+2. Download model files:
+   - Piper requires trained ONNX model files for speech generation
+   - **Recommended models**:
+     - `zh_CN-huayan-medium` - Chinese (Mandarin)
+     - `en_US-lessac-medium` - English
+     - `ja_JP-natsuya-medium` - Japanese
+   
+   - **Download methods**:
+     - Method : Manual download
+       - Chinese model: [https://huggingface.co/csukuangfj/vits-piper-zh_CN-huayan-medium/tree/main](https://huggingface.co/csukuangfj/vits-piper-zh_CN-huayan-medium/tree/main)
+       - Other models: Search "piper" on [Hugging Face](https://huggingface.co/models) or train your own
+
+   - **File placement**:
+     - Download both `.onnx` and `.onnx.json` files to the `models/piper/` directory
+
+3. Configure in `conf.yaml`:
+```yaml
+piper_tts:
+  model_path: "models/piper/zh_CN-huayan-medium.onnx"  # ONNX model file path
+  speaker_id: 0              # Speaker ID for multi-speaker models (use 0 for single-speaker models)
+  length_scale: 1.0          # Speech rate control (1.0 = normal, >1.0 = slower, <1.0 = faster)
+  noise_scale: 0.667         # Audio variation level (0.0-1.0)
+  noise_w: 0.8               # Speaking style variation level (0.0-1.0)
+  volume: 1.0                # Volume (0.0-1.0)
+  normalize_audio: true      # Whether to normalize audio
+  use_cuda: false            # Whether to use GPU acceleration (requires CUDA support)
+```
+
+1. Set `tts_model: piper_tts` in `conf.yaml`
+
+### Features
+- ✅ Completely local, no internet connection required
+- ✅ Real-time CPU inference, fast speed
+- ✅ Supports multiple languages and voices
+- ✅ Supports GPU acceleration (optional)
+- ✅ Small model files, easy to deploy
+
+:::tip
+For more model options, visit the [Piper Voice Samples page](https://rhasspy.github.io/piper-samples/) to listen and download models for different languages and voices.
 :::
 
 ## pyttsx3 (Lightweight and Fast)
@@ -125,7 +175,7 @@ uv run tts --list_models
      - This parameter corresponds to `speaker_wav`
 
 ## GPTSoVITS (Local Deployment, Moderate Performance)
-> Introduced in [PR #40](https://github.com/t41372/Open-LLM-VTuber/pull/40), officially released in version v0.4.0
+> Introduced in [PR #40](https://github.com/Open-LLM-VTuber/Open-LLM-VTuber/pull/40), officially released in version v0.4.0
 
 GPT-SoVITS is a powerful speech synthesis engine capable of high-quality voice cloning.
 
@@ -221,7 +271,7 @@ It's recommended to set stream (streaming generation) to False, as this project 
 :::
 
 ## X-TTS (Local Deployment, Relatively Slow)
-> Available since version `v0.2.4` ([PR#23](https://github.com/t41372/Open-LLM-VTuber/pull/23))
+> Available since version `v0.2.4` ([PR#23](https://github.com/Open-LLM-VTuber/Open-LLM-VTuber/pull/23))
 
 It is recommended to use xtts-api-server, which provides clear API documentation and is relatively easy to deploy.
 
