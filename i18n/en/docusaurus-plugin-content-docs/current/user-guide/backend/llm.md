@@ -178,7 +178,7 @@ groq_llm:
 
 ### Claude (`claude_llm`)
 
-In https://github.com/t41372/Open-LLM-VTuber/pull/35, version `v0.3.1` added support for Claude.
+In https://github.com/Open-LLM-VTuber/Open-LLM-VTuber/pull/35, version `v0.3.1` added support for Claude.
 
 Change `LLM_PROVIDER` to `claude` and complete the settings under `claude`.
 

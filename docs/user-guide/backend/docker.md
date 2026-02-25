@@ -7,6 +7,11 @@ import TabItem from '@theme/TabItem';
 
 # Docker 部署
 
+> 关于本地构建 docker 镜像，参考 [Docker 本地构建指南](../../development-guide/backend/docker.mdx)
+
+## 关于我们的docker团队
+我们在 docker hub 成立了[openllmvtuber团队](https://hub.docker.com/orgs/openllmvtuber/members)，目前docker镜像由[@Harry_Y](https://github.com/Harry-Yu-Shuhang)维护。
+
 ## 下载配置文件
 
 ### git下载（适合有git基础的用户）
@@ -152,6 +157,7 @@ openllmvtuber/open-llm-vtuber:latest
 </details>
 :::
 
+
 更多注意事项，可以参考 [Quick Start 里的配置 LLM 部分](../../quick-start.md#3-配置-llm)。
 
 
@@ -162,6 +168,7 @@ openllmvtuber/open-llm-vtuber:latest
 
 点开"Optional settings", 按照下图配置，
 ![alt text](/docker_img/container_config_cn.png)
+
 
 ### 在浏览器打开web界面
 等到出现这几行字，如下图，就说明启动成功了。第一次拉取会比较慢，因为要安装一些必要工具，请耐心等待。

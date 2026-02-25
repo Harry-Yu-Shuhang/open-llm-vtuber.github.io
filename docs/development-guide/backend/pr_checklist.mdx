@@ -1,0 +1,179 @@
+---
+sidebar_position: 2
+---
+
+
+`version: 2025.08.03`
+
+# Pull Request 指南与核对清单 (Pull Request Guide & Checklist)
+
+欢迎你为 Open-LLM-VTuber 项目贡献代码！我们非常感谢每一位贡献者的付出。
+
+本指南旨在帮助所有贡献者、维护者和 LLM 更好地协作，确保项目代码的高质量、可维护性和长期健康发展。请在提交 Pull Request (PR) 前以及审查 (Review) 他人 PR 时参考本指南。
+
+我们相信，清晰的规范和流程不仅是维护项目的基石，也是一个绝佳的共同学习机会。
+
+> ⚠️ 下面提到的代码标准主要适用于新的代码提交。旧的代码目前可能过不去类型检查，我们会逐步修复，但这需要一些时间。对于 type checker 报的类型错误，请只关注你的 pr 所负责/修改的部分，保证 A1 (一个 PR 只做一件事) 原则，如果你有帮忙修复的意愿，请单独开 PR。
+> 
+
+## A. 核心原则：原子化提交 (The Golden Rule: Atomic PRs)
+
+这是我们最重要的原则，请务必遵守。
+
+**A1. 一个 PR 只做一件事。**
+
+- **好的例子 👍:**
+    - 修复 Bug A (`fix/bug-a`)。
+    - 实现功能 C (`feat/cccc`)。
+    - 重构`audio_processing`模块 (`refactor/audio_processing`)。
+- **不好的例子 👎:**
+    - 修复了 Bug A、Bug B，并同时实现了新功能 C (`fix-a-b-and-implement-c` )。
+
+**为什么这很重要？**
+
+- **易于审查 (Easy to Review):** 小而专注的 PR 让审查者能更快、更深入地理解你的代码，从而给出更高质量的反馈。
+- **易于追溯 (Easy to Track):** 当未来出现问题时，清晰的 Git 历史能让我们快速定位到是哪个具体的变更引入了问题。
+- **易于回滚 (Easy to Revert):** 如果一个小的变更引入了 Bug，我们可以轻易地将其回滚，而不会影响到其他无关的功能。
+
+---
+
+## B. 贡献者清单：提交我的 PR (Contributor's Checklist: Submitting My PR)
+
+在你提交 PR 前，请逐一确认以下事项。这不仅能极大提高 PR 被合并的速度，也是对你自己和其他协作者负责的表现。
+
+### B1. PR 主题与描述 (PR Title & Description)
+
+- [ ]  **B1.1: 标题清晰 (Clear Title):** 标题应简明扼要地概括 PR 的核心内容。例如 `feat: Add OpenAI TTS support` 或 `fix: Resolve audio stuttering on macOS`。记住，一个 PR 只应该干一件事 (A1)。
+- [ ]  **B2.2: 描述完整 (Complete Description):** 描述区应清晰说明：
+    - **解决了什么问题？(What):** 简述此 PR 的目的和背景。
+    - **为什么需要这个变更？(Why):** 解释其必要性。如果是修复 Bug，最好能链接到相关的 Issue。
+    - **如何实现的？(How):** 简要说明技术实现思路。
+    - **如何测试？(How to Test):** 提供清晰的步骤，让审查者可以复现和验证你的成果。
+
+### B2. 代码质量自查 (Code Quality Self-Check)
+
+- [ ]  **B2.1: 原子性 (Atomicity):** 我的 PR 是否严格遵守了 [**A1**](https://www.google.com/search?q=%23a-%E6%A0%B8%E5%BF%83%E5%8E%9F%E5%88%99%E5%8E%9F%E5%AD%90%E5%8C%96%E6%8F%90%E4%BA%A4-the-golden-rule-atomic-prs) 原则？
+- [ ]  **B2.2: 格式化与静态分析 (Formatting & Linting):** 我是否已经在本地运行并通过了以下命令？
+    - `uv run ruff format`
+    - `uv run ruff check`
+- [ ]  **B2.3: 命名规范 (Naming Conventions):** 所有变量、函数和模块名是否都遵循了 **D3.2**？（即 PEP 8 的 `snake_case` 风格）。
+- [ ]  **B2.4: 类型提示与文档字符串 (Type Hints & Docstrings):**
+    - [ ]  **B2.4.1:** 所有新增或修改的函数是否都包含了符合 **D3.3** 规范的 Type Hint？
+    - [ ]  **B2.4.2:** 所有新增或修改的函数是否都包含了符合 **D3.3** 规范的英文 Docstring？
+- [ ]  **B2.5: 依赖管理 (Dependency Management):** 如果我新增了第三方库，是否已深思熟虑并遵循了 **D5. 依赖管理原则**？
+- [ ]  **B2.6: 跨平台兼容性 (Cross-Platform Compatibility):** 我的代码是否能在 macOS, Windows, Linux 上正常运行？如果引入了平台或 GPU 限定的组件，是否已将其设为可选？
+- [ ]  **B2.7: 注释语言 (Comment Language):** 项目内的代码注释、Docstring、以及控制台输出是否都使用了英文？（i18n 多语言实现除外，但英文必须作为默认存在）。
+
+### B3. 功能与逻辑自查 (Functional & Logical Self-Check)
+
+- [ ]  **B3.1: 功能测试 (Functional Testing):** 我是否已在本地完整测试过我的变更，确保它能正常工作且没有引入新的 Bug？
+- [ ]  **B3.2: 项目目标对齐 (Alignment with Project Goals):** 我的变更是否符合 [**D1. 项目核心目标**](https://www.google.com/search?q=%23d1-%E9%A1%B9%E7%9B%AE%E6%A0%B8%E5%BF%83%E7%9B%AE%E6%A0%87-core-project-goals)，且不与 [**D2. 项目未来目标**](https://www.google.com/search?q=%23d2-%E9%A1%B9%E7%9B%AE%E6%9C%AA%E6%9D%A5%E7%9B%AE%E6%A0%87-future-project-goals) 冲突？
+
+### B4. 文档更新 (Documentation Update)
+
+- [ ]  **B4.1: 文档同步 (Documentation Sync):** 如果我的 PR 引入了新功能、新配置项或任何需要用户了解的变更，我是否已经前往文档仓库 (https://github.com/Open-LLM-VTuber/open-llm-vtuber.github.io) 同步更新了相关的文档？**（没有例外）**
+- [ ]  **B4.2: 添加变更日志条目 (Changelog Entry)**: (可选，但推荐) 在 `CHANGELOG.md` 中，在 "Unreleased" 部分下为你的改动添加一个简短的条目。
+
+---
+
+## C. 维护者清单：审查 PR (Maintainer's Checklist: Reviewing a PR)
+
+为了项目长期的健康，请在 Code Review 时认真检查以下各项。你可以直接引用这些编号 (例如，`"关于 C2.1，我认为这个功能的维护成本可能高于其带来的价值..."`) 来发起讨论。
+
+- [ ]  **C1. 理解变更 (Understand the Change):** 我是否已经完全阅读并理解了这个 PR 的全部代码和意图？
+- [ ]  **C2. 战略对齐 (Strategic Alignment):**
+    - [ ]  **C2.1: 必要性与维护成本 (Necessity vs. Maintenance Cost):** 这个功能是否真的必要？它带来的价值是否能超越我们未来需要付出的维护成本？
+    - [ ]  **C2.2: 核心目标符合度 (Core Goal Alignment):** 是否完全符合 **D1. 项目核心目标**？
+    - [ ]  **C2.3: 未来方向一致性 (Future Goal Alignment):** 是否与 **D2. 项目未来目标和项目 roadmap** 的方向一致或至少不冲突？
+- [ ]  **C3. 实现质量 (Implementation Quality):**
+    - [ ]  **C3.1: 设计优雅性 (Design Elegance):** 代码实现是否足够“简单”、“优雅”？是否存在过度设计或过早优化？
+    - [ ]  **C3.2: 代码可维护性 (Maintainability):** 代码是否模块化、低耦合、易于理解和测试？
+    - [ ]  **C3.3: 技术细节核对 (Technical Detail Check):** 贡献者的自查清单 (**B2, B3, B4**) 中的每一项是否都已达标？（例如：Type Hint 是否准确，Docstring 是否清晰，Ruff 检查是否通过等）。
+- [ ]  **C4. 文档完整性 (Documentation Completeness):** 相关的文档是否已经创建或更新，并且内容清晰准确？
+
+---
+
+## D. 项目参考标准 (Project Reference Standards)
+
+本节详细阐述了我们的核心价值观和技术规范，是上述所有清单的判断依据。
+
+### D1. 项目核心目标 (Core Project Goals)
+
+- **D1.1. 断网运行:** 项目核心功能必须支持完全断网运行。任何需要联网的功能都应是可选模块。
+- **D1.2. 前后端分离:** 严格遵循前后端分离的架构，便于独立开发和维护。
+- **D1.3. 跨平台:** 核心后端组件必须能在 macOS, Windows, Linux 上通过 CPU 运行。任何依赖特定平台或 GPU 的组件都应是可选项。
+- **D1.4. 可更新性:** 用户应能通过更新脚本平滑升级。任何破坏性变更 (Breaking Changes) 都必须伴随主版本号的提升 (例如 v1 -> v2)，并切换到新的发布分支。
+- **D1.5. 可维护性:** 代码必须简单、模块化、解耦、可测试，并遵循最佳实践。
+
+### D2. 项目未来目标 (Future Project Goals)
+
+我们正朝着以下方向努力，所有新的代码贡献都应尽量与这些目标保持一致 (但不强求，下面这些未来目标大概率会在 v2 重构时一起实现)。
+
+- **D2.1. 设置项 GUI 化:** 逐步用 GUI 设置界面取代传统的 `yaml` 配置文件。
+- **D2.2. 插件化架构:** 打造一个插件化的生态系统，通过 Launcher 服务以 GUI 的形式来管理和运行 ASR/TTS/LLM 等模块。
+- **D2.3. 稳定的 API:** 提供稳定、可靠的后端 API 供插件和前端调用。
+- **D2.4. 自动化测试:** 全面推进基于 `pytest` 的自动化测试，新代码应具备良好的可测试性。
+
+### D3. 详细代码规范 (Detailed Coding Standards)
+
+### D3.1. Linter 与 Formatter
+
+我们使用 [Ruff](https://docs.astral.sh/ruff/) 来统一代码风格和检查潜在问题。所有提交的代码都必须通过 `ruff format` 和 `ruff check`。
+
+### D3.2. 命名规范 (Naming Conventions)
+
+- 遵循 Python 的 [PEP 8](https://peps.python.org/pep-0008/) 规范。
+- 使用蛇形命名法 (`snake_case`) 来命名变量、函数和模块。
+- 命名应清晰、易懂、无歧义。避免使用单字母变量名（循环变量除外）。
+
+### D3.3. 类型提示与文档字符串 (Type Hints & Docstrings)
+
+- **为什么重要？** Type Hint 和 Docstring 是代码的“说明书”。它们能帮助：
+    - **其他开发者**快速理解你的代码。
+    - **IDE 和静态分析工具**（如 VSCode, Ruff）进行更智能的错误检查和代码补全。
+    - **未来的你**在几个月后还能看懂自己写的代码。
+- **Type Hint 要求:**
+    - 所有函数/方法的参数和返回值**必须**包含 Type Hint。
+    - 项目以 **Python 3.10+** 为目标。请使用现代语法，例如用 `str | None` 替代 `Optional[str]`，用 `list[str]` 替代 `List[str]`。
+    - Type Hint 必须准确。VSCode 的 Python 类型检查器建议设置为 `basic` 或 `strict` 模式来验证。
+- **Docstring 要求:**
+    - 所有新增或重要修改的公共函数/方法/类**必须**包含英文 Docstring。
+    - 我们推荐使用 [Google 风格的 Docstring](https://www.google.com/search?q=https://google.github.io/styleguide/pyguide.html%233.8-comments-and-docstrings)。它至少应包含：
+        - **摘要 (Summary):** 一行总结函数的作用。
+        - **参数 (Args):** 对每个参数的类型和意义进行说明。
+        - **返回值 (Returns):** 对返回值的类型和意义进行说明。
+    - **示例:**Python
+        
+        ```python
+        def add(a: int, b: int) -> int:
+            """Calculates the sum of two integers.
+        
+            Args:
+                a: The first integer.
+                b: The second integer.
+        
+            Returns:
+                The sum of a and b.
+            """
+            return a + b
+        ```
+        
+
+### D4. 架构设计原则 (Architectural Principles)
+
+- **D4.1. ASR/LLM/TTS 模块设计:**
+    - 当一个库支持多个模型，且不同模型的配置差异巨大时，应优先考虑用户体验和理解成本。
+    - 建议将每个复杂的模型封装成一个独立的模块（例如 `asr-whisper-api`, `asr-funasr`），而不是将整个库作为一个大而全的模块。这样能让用户配置更简单，权责更清晰。
+
+### D5. 依赖管理原则 (Dependency Management)
+
+- **D5.1. 每个新依赖都需深思熟虑。**
+    - 这个功能是否可以通过标准库或已有依赖实现？
+    - 这个依赖的许可证 (License) 是否与我们的项目兼容？
+    - 这个新依赖的社区是否活跃？维护状况如何？安全可信吗？是否会造成供应链投毒的问题？
+
+---
+
+感谢你花时间阅读这份指南。我们期待你的贡献！
+
+最后，关于 Pull Request 的审核流程，请保持耐心。我们项目人手不足，核心维护者也比较忙碌，可能会多花点时间。如果过了很长时间 (1周) 没有收到任何回复，我先说声抱歉，我可能忘了这回事。欢迎在 Pull Request 中 @我 (@t41372) 或相关的维护者来催促我们。
