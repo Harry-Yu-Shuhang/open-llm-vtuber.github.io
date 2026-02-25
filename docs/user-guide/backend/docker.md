@@ -199,7 +199,7 @@ docker pull openllmvtuber/open-llm-vtuber:latest
 
 3. 打包容器。可以更改 `docker-compose.yml`，默认的也可以直接一键启动。
 ```bash
-cd OLV-Docker-Config\Path
+cd OLV-Docker-Config
 ```
 
 ```bash 

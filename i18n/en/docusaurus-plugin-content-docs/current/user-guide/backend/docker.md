@@ -200,7 +200,7 @@ docker pull openllmvtuber/open-llm-vtuber:latest
 
 3. Start the container. You can modify `docker-compose.yml` if needed; the default can also be started with one command.
 ```bash
-cd OLV-Docker-Config\Path
+cd OLV-Docker-Config
 ```
 
 ```bash
