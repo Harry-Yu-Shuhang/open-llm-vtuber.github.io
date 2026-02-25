@@ -49,7 +49,7 @@ git clone https://github.com/Open-LLM-VTuber/OLV-Docker-Config
 :::tip 关于安装方式
 目前支持两种方式。
 - 如果您是小白，推荐您[使用 Docker DeskTop](#使用-docker-desktop-安装-docker) 。
-- 如果您对 Docker 比较熟悉，也可以[使用终端命令](#使用终端命令安装-docker))。
+- 如果您对 Docker 比较熟悉，也可以[使用终端命令](#使用终端命令安装-docker)。
 :::
 
 :::caution 关于GPU支持
